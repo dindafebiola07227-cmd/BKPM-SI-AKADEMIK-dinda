@@ -18,7 +18,7 @@ class HomeController
                 content="width=device-width, initial-scale=1"
             >
 
-            <title>SI Akademik - Acara 8</title>
+            <title>SI Akademik - Main Branch</title>
 
             <link
                 href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -37,7 +37,7 @@ class HomeController
                     </span>
 
                     <a
-                        href="/si-akademik_bkpmpt9/public/login"
+                        href="/si-akademik_bkpmpt12/public/login"
                         class="btn btn-light btn-sm"
                     >
                         🔐 Login
@@ -73,7 +73,7 @@ class HomeController
                         </p>
 
                         <a
-                            href="/si-akademik_bkpmpt9/public/login"
+                            href="/si-akademik_bkpmpt12/public/login"
                             class="btn btn-primary px-4"
                         >
                             🔐 Login
@@ -109,7 +109,7 @@ class HomeController
                 content="width=device-width, initial-scale=1"
             >
 
-            <title>Dashboard - SI Akademik Acara 8</title>
+            <title>Dashboard - SI Akademik Acara 12</title>
 
             <link
                 href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -125,14 +125,14 @@ class HomeController
                 <div class="container">
 
                     <a
-                        href="/si-akademik_bkpmpt9/public/dashboard"
+                        href="/si-akademik_bkpmpt12/public/dashboard"
                         class="navbar-brand fw-bold text-white text-decoration-none"
                     >
                         🎓 SI Akademik
                     </a>
 
                     <a
-                        href="/si-akademik_bkpmpt9/public/logout"
+                        href="/si-akademik_bkpmpt12/public/logout"
                         class="btn btn-light btn-sm"
                     >
                         🚪 Logout
@@ -165,14 +165,14 @@ class HomeController
                         <div class="d-flex justify-content-center gap-2 flex-wrap">
 
                             <a
-                                href="/si-akademik_bkpmpt9/public/mahasiswa"
+                                href="/si-akademik_bkpmpt12/public/mahasiswa"
                                 class="btn btn-primary"
                             >
                                 📚 Data Mahasiswa
                             </a>
 
                             <a
-                                href="/si-akademik_bkpmpt9/public/mahasiswa/create"
+                                href="/si-akademik_bkpmpt12/public/mahasiswa/create"
                                 class="btn btn-outline-primary"
                             >
                                 ➕ Tambah Mahasiswa
