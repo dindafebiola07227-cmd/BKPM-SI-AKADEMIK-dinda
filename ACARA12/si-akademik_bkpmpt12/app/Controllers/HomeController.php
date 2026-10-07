@@ -18,7 +18,7 @@ class HomeController
                 content="width=device-width, initial-scale=1"
             >
 
-            <title>SI Akademik - Acara 8</title>
+            <title>SI Akademik - Fitur Login Baru</title>
 
             <link
                 href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
