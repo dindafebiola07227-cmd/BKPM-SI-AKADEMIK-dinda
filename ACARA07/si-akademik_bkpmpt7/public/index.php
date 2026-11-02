@@ -6,7 +6,14 @@ require_once __DIR__ . '/../routes/web.php';
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-$base = '/si-akademik_bkpmpt7/public';
+$base = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
+
+if ($base === '.' || $base === '/') {
+    $base = '';
+}
+
+// Base URL otomatis mengikuti folder project yang sedang dijalankan.
+define('BASE_URL', $base);
 
 /*
 |--------------------------------------------------------------------------

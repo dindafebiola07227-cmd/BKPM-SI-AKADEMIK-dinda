@@ -7,7 +7,7 @@ class AuthMiddleware
     public function handle()
     {
         if (!isset($_SESSION['user'])) {
-            header('Location: /SI-AKADEMIK_BKPMPT7/public/login');
+            header('Location: ' . BASE_URL . '/login');
             exit;
         }
 

@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{baseUrl}}/mahasiswa?id={{mhsId}}"
+method: DELETE
+queryParams:
+  id: "{{mhsId}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 404', () => pm.response.to.have.status(404));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = false', () => pm.expect(j.success).to.eql(false));
+    language: text/javascript
+order: 12000

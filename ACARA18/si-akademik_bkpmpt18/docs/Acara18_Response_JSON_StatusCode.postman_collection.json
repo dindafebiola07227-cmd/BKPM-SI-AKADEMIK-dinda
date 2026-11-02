@@ -1,0 +1,1325 @@
+{
+  "info": {
+    "name": "Acara 18 - JSON Encoding & HTTP Status Code (Response::json)",
+    "description": "Set variabel baseUrl sesuai lokasi folder public/, mis. http://localhost/BKPM/ACARA18/si-akademik_bkpmpt18/public. Jalankan lewat Runner dari atas ke bawah (POST menyimpan mhsId/bukuId untuk request berikutnya). NIM harus 9 digit.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Resource Mahasiswa (sukses, 400, 404, 409, 422)",
+      "item": [
+        {
+          "name": "1. POST - Tambah mahasiswa (201)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// NIM acak 9 digit supaya collection bisa dijalankan berulang kali",
+                  "pm.collectionVariables.set('nimBaru', '22' + String(Date.now()).slice(-7));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = true', () => pm.expect(j.success).to.eql(true));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Data berhasil ditambahkan\"));",
+                  "pm.test('data.id berupa angka', () => pm.expect(j.data.id).to.be.a('number'));",
+                  "pm.collectionVariables.set('mhsId', j.data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nim\": \"{{nimBaru}}\",\n  \"nama\": \"Andi Saputra\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. GET - Semua mahasiswa (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = true', () => pm.expect(j.success).to.eql(true));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Data berhasil diambil\"));",
+                  "pm.test('data berupa array', () => pm.expect(j.data).to.be.an('array'));",
+                  "pm.test('Pretty print aktif (APP_ENV = development)', () => pm.expect(pm.response.text()).to.include('\\n'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. GET - Mahasiswa berdasarkan ID (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = true', () => pm.expect(j.success).to.eql(true));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Data berhasil diambil\"));",
+                  "pm.test('NIM sesuai', () => pm.expect(j.data.nim).to.eql(pm.collectionVariables.get('nimBaru')));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa?id={{mhsId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{mhsId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. PUT - Ubah mahasiswa (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = true', () => pm.expect(j.success).to.eql(true));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Data berhasil diperbarui\"));",
+                  "pm.test('nama berubah', () => pm.expect(j.data.nama).to.eql('Andi Saputra Pratama'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa?id={{mhsId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{mhsId}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nim\": \"{{nimBaru}}\",\n  \"nama\": \"Andi Saputra Pratama\",\n  \"prodi\": \"Sistem Informasi\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. POST - NIM duplikat (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 409', () => pm.response.to.have.status(409));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(j.success).to.eql(false));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"NIM sudah terdaftar\"));",
+                  "pm.test('errors berisi daftar pesan per field', () => { pm.expect(j.errors).to.be.an('object'); pm.expect(j.errors.nim).to.be.an('array'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nim\": \"{{nimBaru}}\",\n  \"nama\": \"Andi Saputra Pratama\",\n  \"prodi\": \"Sistem Informasi\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6. POST - Body kosong {} (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(j.success).to.eql(false));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Field nim, nama, dan prodi wajib diisi\"));",
+                  "pm.test('errors berisi daftar pesan per field', () => { pm.expect(j.errors).to.be.an('object'); pm.expect(j.errors.nim).to.be.an('array'); pm.expect(j.errors.nama).to.be.an('array'); pm.expect(j.errors.prodi).to.be.an('array'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7. POST - Field tidak lengkap (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(j.success).to.eql(false));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Field nim, nama, dan prodi wajib diisi\"));",
+                  "pm.test('errors berisi daftar pesan per field', () => { pm.expect(j.errors).to.be.an('object'); pm.expect(j.errors.nama).to.be.an('array'); pm.expect(j.errors.prodi).to.be.an('array'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nim\": \"220199999\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "8. POST - Format NIM salah, 7 digit (422)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 422', () => pm.response.to.have.status(422));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(j.success).to.eql(false));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Format NIM tidak valid, harus 9 digit\"));",
+                  "pm.test('errors berisi daftar pesan per field', () => { pm.expect(j.errors).to.be.an('object'); pm.expect(j.errors.nim).to.be.an('array'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nim\": \"2201001\",\n  \"nama\": \"Andi Saputra\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "9. POST - Format NIM salah, 10 digit (422)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 422', () => pm.response.to.have.status(422));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(j.success).to.eql(false));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Format NIM tidak valid, harus 9 digit\"));",
+                  "pm.test('errors berisi daftar pesan per field', () => { pm.expect(j.errors).to.be.an('object'); pm.expect(j.errors.nim).to.be.an('array'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nim\": \"2201001234\",\n  \"nama\": \"Andi Saputra\",\n  \"prodi\": \"Teknik Informatika\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "10. POST - Body bukan JSON valid (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(j.success).to.eql(false));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Body request harus berupa JSON yang valid\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{nim: 2201999, nama:",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "11. GET - ID bukan angka (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(j.success).to.eql(false));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"ID harus berupa angka positif\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa?id=abc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "abc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "12. GET - ID tidak ditemukan (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 404', () => pm.response.to.have.status(404));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(j.success).to.eql(false));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Data tidak ditemukan\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa?id=999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "999999"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "13. PUT - ID tidak ditemukan (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 404', () => pm.response.to.have.status(404));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(j.success).to.eql(false));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Data tidak ditemukan\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa?id=999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "999999"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nim\": \"{{nimBaru}}\",\n  \"nama\": \"Andi Saputra Pratama\",\n  \"prodi\": \"Sistem Informasi\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "14. PUT - Format NIM salah (422)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 422', () => pm.response.to.have.status(422));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(j.success).to.eql(false));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Format NIM tidak valid, harus 9 digit\"));",
+                  "pm.test('errors berisi daftar pesan per field', () => { pm.expect(j.errors).to.be.an('object'); pm.expect(j.errors.nim).to.be.an('array'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa?id={{mhsId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{mhsId}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nim\": \"123\",\n  \"nama\": \"Andi Saputra Pratama\",\n  \"prodi\": \"Sistem Informasi\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "15. PUT - Tanpa ID (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(j.success).to.eql(false));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nim\": \"{{nimBaru}}\",\n  \"nama\": \"Andi Saputra Pratama\",\n  \"prodi\": \"Sistem Informasi\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "16. DELETE - Hapus mahasiswa (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = true', () => pm.expect(j.success).to.eql(true));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Data berhasil dihapus\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa?id={{mhsId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{mhsId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "17. GET - Setelah dihapus (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 404', () => pm.response.to.have.status(404));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(j.success).to.eql(false));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Data tidak ditemukan\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa?id={{mhsId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{mhsId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "18. DELETE - ID sudah tidak ada (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 404', () => pm.response.to.have.status(404));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(j.success).to.eql(false));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa?id={{mhsId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{mhsId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2. Resource Buku",
+      "item": [
+        {
+          "name": "1. POST - Tambah buku (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = true', () => pm.expect(j.success).to.eql(true));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Data berhasil ditambahkan\"));",
+                  "pm.collectionVariables.set('bukuId', j.data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/buku",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "buku"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"judul\": \"Pemrograman Web dengan PHP\",\n  \"penulis\": \"Budi Raharjo\",\n  \"tahun_terbit\": 2020\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. GET - Semua buku (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = true', () => pm.expect(j.success).to.eql(true));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('data berupa array', () => pm.expect(j.data).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/buku",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "buku"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. GET - Buku berdasarkan ID (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = true', () => pm.expect(j.success).to.eql(true));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('judul sesuai', () => pm.expect(j.data.judul).to.eql('Pemrograman Web dengan PHP'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/buku?id={{bukuId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "buku"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{bukuId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. PUT - Ubah buku (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = true', () => pm.expect(j.success).to.eql(true));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('tahun berubah', () => pm.expect(Number(j.data.tahun_terbit)).to.eql(2022));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/buku?id={{bukuId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "buku"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{bukuId}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"judul\": \"Pemrograman Web dengan PHP (Edisi Revisi)\",\n  \"penulis\": \"Budi Raharjo\",\n  \"tahun_terbit\": 2022\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. POST - Tahun terbit tidak valid (422)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 422', () => pm.response.to.have.status(422));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(j.success).to.eql(false));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Format tahun_terbit tidak valid\"));",
+                  "pm.test('errors berisi daftar pesan per field', () => { pm.expect(j.errors).to.be.an('object'); pm.expect(j.errors.tahun_terbit).to.be.an('array'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/buku",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "buku"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"judul\": \"Buku Uji\",\n  \"penulis\": \"Penulis Uji\",\n  \"tahun_terbit\": \"abcd\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6. POST - Field tidak lengkap (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(j.success).to.eql(false));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Field judul, penulis, dan tahun_terbit wajib diisi\"));",
+                  "pm.test('errors berisi daftar pesan per field', () => { pm.expect(j.errors).to.be.an('object'); pm.expect(j.errors.penulis).to.be.an('array'); pm.expect(j.errors.tahun_terbit).to.be.an('array'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/buku",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "buku"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"judul\": \"Buku Uji\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7. DELETE - Hapus buku (200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = true', () => pm.expect(j.success).to.eql(true));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Data berhasil dihapus\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/buku?id={{bukuId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "buku"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{bukuId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "8. GET - Setelah dihapus (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 404', () => pm.response.to.have.status(404));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(j.success).to.eql(false));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Data tidak ditemukan\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/buku?id={{bukuId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "buku"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{bukuId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3. Router (404 & 405 lewat Response::json)",
+      "item": [
+        {
+          "name": "1. GET - Endpoint tidak dikenal (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 404', () => pm.response.to.have.status(404));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(j.success).to.eql(false));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Endpoint tidak ditemukan\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/produk",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "produk"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. PATCH - Method tidak diizinkan (405)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code 405', () => pm.response.to.have.status(405));",
+                  "pm.test('Response berformat JSON', () => pm.response.to.be.json);",
+                  "const j = pm.response.json();",
+                  "pm.test('success = false', () => pm.expect(j.success).to.eql(false));",
+                  "pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });",
+                  "pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));",
+                  "pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql(\"Method tidak diizinkan\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mahasiswa?id=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "mahasiswa"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"x\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost/BKPM/ACARA18/si-akademik_bkpmpt18/public"
+    },
+    {
+      "key": "mhsId",
+      "value": "999999"
+    },
+    {
+      "key": "bukuId",
+      "value": "999999"
+    },
+    {
+      "key": "nimBaru",
+      "value": "220100001"
+    }
+  ]
+}

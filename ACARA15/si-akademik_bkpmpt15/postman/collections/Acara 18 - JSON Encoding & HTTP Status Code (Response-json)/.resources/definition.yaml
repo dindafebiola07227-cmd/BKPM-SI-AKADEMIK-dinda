@@ -1,0 +1,8 @@
+$kind: collection
+name: Acara 18 - JSON Encoding & HTTP Status Code (Response::json)
+description: Set variabel baseUrl sesuai lokasi folder public/, mis. http://localhost/BKPM/ACARA18/si-akademik_bkpmpt18/public. Jalankan lewat Runner dari atas ke bawah (POST menyimpan mhsId/bukuId untuk request berikutnya). NIM harus 9 digit.
+variables:
+  baseUrl: http://localhost/BKPM/ACARA18/si-akademik_bkpmpt18/public
+  mhsId: "999999"
+  bukuId: "999999"
+  nimBaru: "220100001"

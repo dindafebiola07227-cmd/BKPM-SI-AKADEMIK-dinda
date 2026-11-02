@@ -1,0 +1,18 @@
+# Use this workspace to collaborate
+workspace:
+  id: fa7f5d1f-b28a-4429-86c2-707ca541baec
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections:
+    ../postman/collections/Acara 16 - RESTful API Mahasiswa: 321279ac-b5da-4b16-8072-7ff1bb352f35
+    ../postman/collections/Acara 17 - Skeleton MVC (Mahasiswa & Buku): 9beb8167-3053-4d45-922c-2e947ce64880
+    ../postman/collections/Acara 18 - JSON Encoding & HTTP Status Code (Response-json): c1c48c86-faf5-4bbb-9006-523217ddf2dd
+    ../postman/collections/API Sistem Informasi Akademik (MVC): e7b5952a-a807-40fa-a35a-212907d19868
+
+# All resources in the `postman/` folder are automatically registered in Local View.
+# Point to additional files outside the `postman/` folder to register them individually. Example:
+#localResources:
+#  collections:
+#    - ../tests/E2E Test Collection/

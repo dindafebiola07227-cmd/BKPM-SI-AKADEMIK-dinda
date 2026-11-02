@@ -3,7 +3,7 @@
 
         <a
             class="navbar-brand text-white fw-bold"
-            href="/SI-AKADEMIK_BKPMPT6/public/dashboard"
+            href="<?= BASE_URL ?>/dashboard"
         >
             🎓 SI Akademik
         </a>
@@ -24,7 +24,7 @@
                 <li class="nav-item">
                     <a
                         class="nav-link text-white"
-                        href="/SI-AKADEMIK_BKPMPT6/public/dashboard"
+                        href="<?= BASE_URL ?>/dashboard"
                     >
                         🏠 Beranda
                     </a>
@@ -33,7 +33,7 @@
                 <li class="nav-item">
                     <a
                         class="nav-link text-white"
-                        href="/SI-AKADEMIK_BKPMPT6/public/mahasiswa"
+                        href="<?= BASE_URL ?>/mahasiswa"
                     >
                         📚 Mahasiswa
                     </a>
@@ -42,7 +42,7 @@
                 <li class="nav-item">
                     <a
                         class="nav-link text-white"
-                        href="/SI-AKADEMIK_BKPMPT6/public/mahasiswa/create"
+                        href="<?= BASE_URL ?>/mahasiswa/create"
                     >
                         ➕ Tambah Mahasiswa
                     </a>
@@ -52,7 +52,7 @@
 
             <a
                 class="btn btn-light btn-sm"
-                href="/SI-AKADEMIK_BKPMPT6/public/logout"
+                href="<?= BASE_URL ?>/logout"
             >
                 🚪 Logout
             </a>

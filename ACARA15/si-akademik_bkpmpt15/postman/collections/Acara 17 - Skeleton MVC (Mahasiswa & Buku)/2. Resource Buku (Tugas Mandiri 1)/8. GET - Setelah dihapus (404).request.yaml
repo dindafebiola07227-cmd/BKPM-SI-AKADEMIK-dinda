@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/buku?id={{bukuId}}"
+method: GET
+queryParams:
+  id: "{{bukuId}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 404', () => pm.response.to.have.status(404));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = false', () => pm.expect(j.success).to.eql(false));
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("Data tidak ditemukan"));
+    language: text/javascript
+order: 8000

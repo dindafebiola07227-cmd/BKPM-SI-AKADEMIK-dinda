@@ -1,0 +1,22 @@
+$kind: http-request
+url: "{{baseUrl}}/buku"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "judul": "Buku Uji",
+      "penulis": "Penulis Uji",
+      "tahun_terbit": "abcd"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 400', () => pm.response.to.have.status(400));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = false', () => pm.expect(j.success).to.eql(false));
+    language: text/javascript
+order: 5000

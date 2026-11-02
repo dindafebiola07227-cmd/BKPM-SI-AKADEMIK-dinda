@@ -1,0 +1,26 @@
+$kind: http-request
+url: "{{baseUrl}}/buku"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "judul": "Pemrograman Web dengan PHP",
+      "penulis": "Budi Raharjo",
+      "tahun_terbit": 2020
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 201', () => pm.response.to.have.status(201));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = true', () => pm.expect(j.success).to.eql(true));
+      pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });
+      pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("Data berhasil ditambahkan"));
+      pm.collectionVariables.set('bukuId', j.data.id);
+    language: text/javascript
+order: 1000

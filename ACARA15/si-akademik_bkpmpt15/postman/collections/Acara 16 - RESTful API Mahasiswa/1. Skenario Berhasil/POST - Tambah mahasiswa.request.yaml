@@ -1,0 +1,25 @@
+$kind: http-request
+url: "{{baseUrl}}/api/mahasiswa"
+method: POST
+headers:
+  Accept: application/json
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "nim": "2401010",
+        "nama": "Dewi Lestari",
+        "email": "dewi@gmail.com",
+        "prodi_id": 1,
+        "angkatan": 2024
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code 201", function () { pm.response.to.have.status(201); });
+      pm.test("Response berformat JSON", function () { pm.response.to.be.json; });
+      pm.test("success = true", function () { pm.expect(pm.response.json().success).to.eql(true); });
+      if (pm.response.code === 201) { pm.collectionVariables.set("newId", pm.response.json().data.id); }
+    language: text/javascript
+order: 3000

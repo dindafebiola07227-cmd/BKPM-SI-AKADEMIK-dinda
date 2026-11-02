@@ -46,7 +46,7 @@ class AuthController
                                 </div>
 
                                 <form method="POST"
-                                      action="/SI-AKADEMIK_BKPMPT7/public/login">
+                                      action="' . BASE_URL . '/login">
 
                                     <div class="mb-3">
                                         <label class="form-label">
@@ -110,7 +110,7 @@ class AuthController
             $_SESSION['user'] = $username;
 
             header(
-                'Location: /SI-AKADEMIK_BKPMPT6/public/dashboard'
+                'Location: ' . BASE_URL . '/dashboard'
             );
 
             exit;
@@ -154,7 +154,7 @@ class AuthController
                             <hr>
 
                             <a
-                                href="/SI-AKADEMIK_BKPMPT6/public/login"
+                                href="' . BASE_URL . '/login"
                                 class="btn btn-danger"
                             >
                                 Kembali ke Login
@@ -178,7 +178,7 @@ class AuthController
         unset($_SESSION['user']);
 
         header(
-            'Location: /SI-AKADEMIK_BKPMPT6/public/login'
+            'Location: ' . BASE_URL . '/login'
         );
 
         exit;

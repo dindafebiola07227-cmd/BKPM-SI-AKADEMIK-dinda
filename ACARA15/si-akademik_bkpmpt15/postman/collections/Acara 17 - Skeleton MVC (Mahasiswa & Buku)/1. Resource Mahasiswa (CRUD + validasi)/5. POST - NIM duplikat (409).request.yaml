@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{baseUrl}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "nim": "{{nimBaru}}",
+      "nama": "Andi Saputra",
+      "prodi": "Teknik Informatika"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 409', () => pm.response.to.have.status(409));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = false', () => pm.expect(j.success).to.eql(false));
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("NIM sudah terdaftar"));
+    language: text/javascript
+order: 5000

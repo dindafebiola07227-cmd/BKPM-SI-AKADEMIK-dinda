@@ -1,0 +1,7 @@
+$kind: collection
+description: Collection Acara 19. Pilih Environment "Local" (atau "Staging") agar variabel base_url terisi. Jalankan lewat Runner dari atas ke bawah. Folder Auth menguji POST /register; folder Mahasiswa dipindahkan dari Acara 17-18.
+variables:
+  mhsId: "999999"
+  nimBaru: "220100001"
+  unameBaru: uji_awal
+  emailBaru: uji_awal@gmail.com

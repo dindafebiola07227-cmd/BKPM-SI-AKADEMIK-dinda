@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: "{}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 400', () => pm.response.to.have.status(400));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = false', () => pm.expect(j.success).to.eql(false));
+      pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("Field nim, nama, dan prodi wajib diisi"));
+      pm.test('errors berisi daftar pesan per field', () => { pm.expect(j.errors).to.be.an('object'); pm.expect(j.errors.nim).to.be.an('array'); pm.expect(j.errors.nama).to.be.an('array'); pm.expect(j.errors.prodi).to.be.an('array'); });
+    language: text/javascript
+examples: ./.resources/6. POST - Body kosong {} (400).resources/examples
+order: 6000

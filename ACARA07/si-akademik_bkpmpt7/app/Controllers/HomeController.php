@@ -37,7 +37,7 @@ class HomeController
                     </span>
 
                     <a
-                        href="' . '/SI-AKADEMIK_BKPMPT7/public/login' . '"
+                        href="' . BASE_URL . '/login' . '"
                         class="btn btn-light btn-sm"
                     >
                         🔐 Login
@@ -73,7 +73,7 @@ class HomeController
                         </p>
 
                         <a
-                            href="' . '/SI-AKADEMIK_BKPMPT7/public/login' . '"
+                            href="' . BASE_URL . '/login' . '"
                             class="btn btn-primary px-4"
                         >
                             🔐 Login
@@ -124,14 +124,14 @@ class HomeController
                 <div class="container">
 
                     <a
-                        href="/SI-AKADEMIK_BKPMPT7/public/dashboard"
+                        href="' . BASE_URL . '/dashboard"
                         class="navbar-brand fw-bold text-white text-decoration-none"
                     >
                         🎓 SI Akademik
                     </a>
 
                     <a
-                        href="/SI-AKADEMIK_BKPMPT7/public/logout"
+                        href="' . BASE_URL . '/logout"
                         class="btn btn-light btn-sm"
                     >
                         🚪 Logout
@@ -164,14 +164,14 @@ class HomeController
                         <div class="d-flex justify-content-center gap-2 flex-wrap">
 
                             <a
-                                href="/SI-AKADEMIK_BKPMPT7/public/mahasiswa"
+                                href="' . BASE_URL . '/mahasiswa"
                                 class="btn btn-primary"
                             >
                                 📚 Data Mahasiswa
                             </a>
 
                             <a
-                                href="/SI-AKADEMIK_BKPMPT7/public/mahasiswa/create"
+                                href="' . BASE_URL . '/mahasiswa/create"
                                 class="btn btn-outline-primary"
                             >
                                 ➕ Tambah Mahasiswa

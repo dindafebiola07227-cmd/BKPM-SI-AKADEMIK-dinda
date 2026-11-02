@@ -1,0 +1,26 @@
+$kind: http-request
+url: "{{baseUrl}}/mahasiswa?id={{mhsId}}"
+method: PUT
+headers:
+  Content-Type: application/json
+queryParams:
+  id: "{{mhsId}}"
+body:
+  type: json
+  content: |-
+    {
+      "nim": "{{nimBaru}}",
+      "nama": "Andi Saputra Pratama",
+      "prodi": "Sistem Informasi"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 200', () => pm.response.to.have.status(200));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = true', () => pm.expect(j.success).to.eql(true));
+      pm.test('nama berubah', () => pm.expect(j.data.nama).to.eql('Andi Saputra Pratama'));
+      pm.test('prodi berubah', () => pm.expect(j.data.prodi).to.eql('Sistem Informasi'));
+    language: text/javascript
+order: 4000

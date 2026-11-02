@@ -1,0 +1,25 @@
+$kind: http-request
+url: "{{base_url}}/mahasiswa?id=1"
+method: PATCH
+headers:
+  Content-Type: application/json
+queryParams:
+  id: "1"
+body:
+  type: json
+  content: |-
+    {
+      "nama": "x"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 405', () => pm.response.to.have.status(405));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = false', () => pm.expect(j.success).to.eql(false));
+      pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("Method tidak diizinkan"));
+    language: text/javascript
+examples: ./.resources/15. PATCH - Method tidak diizinkan (405).resources/examples
+order: 15000

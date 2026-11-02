@@ -1,0 +1,24 @@
+$kind: http-request
+url: "{{baseUrl}}/buku"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "judul": "Buku Uji"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 400', () => pm.response.to.have.status(400));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = false', () => pm.expect(j.success).to.eql(false));
+      pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });
+      pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("Field judul, penulis, dan tahun_terbit wajib diisi"));
+      pm.test('errors berisi daftar pesan per field', () => { pm.expect(j.errors).to.be.an('object'); pm.expect(j.errors.penulis).to.be.an('array'); pm.expect(j.errors.tahun_terbit).to.be.an('array'); });
+    language: text/javascript
+order: 6000

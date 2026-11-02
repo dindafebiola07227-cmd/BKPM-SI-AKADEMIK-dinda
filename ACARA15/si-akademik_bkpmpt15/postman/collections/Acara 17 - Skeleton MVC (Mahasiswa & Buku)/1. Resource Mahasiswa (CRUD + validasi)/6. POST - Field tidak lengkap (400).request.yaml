@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{baseUrl}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "nim": "2201999"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 400', () => pm.response.to.have.status(400));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = false', () => pm.expect(j.success).to.eql(false));
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("Field nim, nama, prodi wajib diisi"));
+    language: text/javascript
+order: 6000

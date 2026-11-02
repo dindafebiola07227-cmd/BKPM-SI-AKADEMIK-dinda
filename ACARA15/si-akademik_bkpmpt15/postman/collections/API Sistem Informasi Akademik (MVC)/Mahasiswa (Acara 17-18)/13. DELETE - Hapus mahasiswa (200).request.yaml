@@ -1,0 +1,17 @@
+$kind: http-request
+url: "{{base_url}}/mahasiswa?id={{mhsId}}"
+method: DELETE
+queryParams:
+  id: "{{mhsId}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 200', () => pm.response.to.have.status(200));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = true', () => pm.expect(j.success).to.eql(true));
+      pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("Data berhasil dihapus"));
+    language: text/javascript
+examples: ./.resources/13. DELETE - Hapus mahasiswa (200).resources/examples
+order: 13000

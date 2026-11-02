@@ -1,0 +1,25 @@
+$kind: http-request
+url: "{{baseUrl}}/buku?id={{bukuId}}"
+method: PUT
+headers:
+  Content-Type: application/json
+queryParams:
+  id: "{{bukuId}}"
+body:
+  type: json
+  content: |-
+    {
+      "judul": "Pemrograman Web dengan PHP (Edisi Revisi)",
+      "penulis": "Budi Raharjo",
+      "tahun_terbit": 2022
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 200', () => pm.response.to.have.status(200));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = true', () => pm.expect(j.success).to.eql(true));
+      pm.test('tahun berubah', () => pm.expect(Number(j.data.tahun_terbit)).to.eql(2022));
+    language: text/javascript
+order: 4000

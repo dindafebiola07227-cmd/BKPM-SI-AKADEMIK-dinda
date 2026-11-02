@@ -1,0 +1,24 @@
+$kind: http-request
+url: "{{baseUrl}}/mahasiswa"
+method: PUT
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "nim": "{{nimBaru}}",
+      "nama": "Andi Saputra Pratama",
+      "prodi": "Sistem Informasi"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 400', () => pm.response.to.have.status(400));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = false', () => pm.expect(j.success).to.eql(false));
+      pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });
+      pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));
+    language: text/javascript
+order: 15000

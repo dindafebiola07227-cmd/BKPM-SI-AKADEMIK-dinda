@@ -1,0 +1,7 @@
+$kind: collection
+description: Pengujian API pola MVC + Front Controller. Set variabel baseUrl sesuai lokasi folder public/, mis. http://localhost/BKPM/ACARA17/si-akademik_bkpmpt17/public. Jalankan lewat Runner dari atas ke bawah (POST menyimpan mhsId/bukuId untuk request berikutnya).
+variables:
+  baseUrl: http://localhost/BKPM/ACARA17/si-akademik_bkpmpt17/public
+  mhsId: "999999"
+  bukuId: "999999"
+  nimBaru: "2201001"

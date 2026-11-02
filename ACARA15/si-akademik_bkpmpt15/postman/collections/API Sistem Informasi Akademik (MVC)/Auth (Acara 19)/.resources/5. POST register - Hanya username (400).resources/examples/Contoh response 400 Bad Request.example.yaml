@@ -1,0 +1,35 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/register"
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "username": "hanya_username"
+      }
+response:
+  statusCode: 400
+  statusText: Bad Request
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+          "success": false,
+          "message": "Username, email, dan password wajib diisi",
+          "data": null,
+          "errors": {
+              "email": [
+                  "Email wajib diisi"
+              ],
+              "password": [
+                  "Password wajib diisi"
+              ]
+          },
+          "timestamp": "2026-11-01T00:30:05+07:00"
+      }
+order: 1000

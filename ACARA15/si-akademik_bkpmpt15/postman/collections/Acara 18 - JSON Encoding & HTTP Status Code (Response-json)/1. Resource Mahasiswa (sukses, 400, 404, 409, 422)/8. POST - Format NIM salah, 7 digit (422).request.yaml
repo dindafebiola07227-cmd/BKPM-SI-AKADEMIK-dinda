@@ -1,0 +1,26 @@
+$kind: http-request
+url: "{{baseUrl}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "nim": "2201001",
+      "nama": "Andi Saputra",
+      "prodi": "Teknik Informatika"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 422', () => pm.response.to.have.status(422));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = false', () => pm.expect(j.success).to.eql(false));
+      pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });
+      pm.test('timestamp berformat tanggal valid', () => pm.expect(new Date(j.timestamp).toString()).to.not.eql('Invalid Date'));
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("Format NIM tidak valid, harus 9 digit"));
+      pm.test('errors berisi daftar pesan per field', () => { pm.expect(j.errors).to.be.an('object'); pm.expect(j.errors.nim).to.be.an('array'); });
+    language: text/javascript
+order: 8000

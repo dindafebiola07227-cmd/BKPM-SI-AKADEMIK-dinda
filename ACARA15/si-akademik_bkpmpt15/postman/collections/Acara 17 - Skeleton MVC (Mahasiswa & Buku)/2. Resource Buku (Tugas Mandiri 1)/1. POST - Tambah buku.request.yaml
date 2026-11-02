@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{baseUrl}}/buku"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "judul": "Pemrograman Web dengan PHP",
+      "penulis": "Budi Raharjo",
+      "tahun_terbit": 2020
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 201', () => pm.response.to.have.status(201));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = true', () => pm.expect(j.success).to.eql(true));
+      pm.collectionVariables.set('bukuId', j.data.id);
+    language: text/javascript
+order: 1000

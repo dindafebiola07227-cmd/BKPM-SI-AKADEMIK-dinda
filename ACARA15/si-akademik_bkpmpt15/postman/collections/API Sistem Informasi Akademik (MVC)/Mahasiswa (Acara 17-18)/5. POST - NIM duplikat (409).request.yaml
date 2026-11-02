@@ -1,0 +1,26 @@
+$kind: http-request
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "nim": "{{nimBaru}}",
+      "nama": "Andi Saputra Pratama",
+      "prodi": "Sistem Informasi"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 409', () => pm.response.to.have.status(409));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = false', () => pm.expect(j.success).to.eql(false));
+      pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("NIM sudah terdaftar"));
+      pm.test('errors berisi daftar pesan per field', () => { pm.expect(j.errors).to.be.an('object'); pm.expect(j.errors.nim).to.be.an('array'); });
+    language: text/javascript
+examples: ./.resources/5. POST - NIM duplikat (409).resources/examples
+order: 5000

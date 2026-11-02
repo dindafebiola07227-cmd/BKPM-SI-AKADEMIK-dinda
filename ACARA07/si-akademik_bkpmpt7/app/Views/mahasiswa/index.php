@@ -19,7 +19,7 @@ ob_start();
 
         <a
             class="navbar-brand text-white fw-bold"
-            href="/SI-AKADEMIK_BKPMPT6/public/dashboard"
+            href="<?= BASE_URL ?>/dashboard"
         >
             🎓 SI Akademik
         </a>
@@ -27,28 +27,28 @@ ob_start();
         <div class="d-flex align-items-center gap-2">
 
             <a
-                href="http://localhost//SI-AKADEMIK_BKPMPT6/public/dashboard"
+                href="<?= BASE_URL ?>/dashboard"
                 class="btn btn-light btn-sm"
             >
                 🏠 Beranda
             </a>
 
             <a
-                href="/SI-AKADEMIK_BKPMPT6/public/mahasiswa"
+                href="<?= BASE_URL ?>/mahasiswa"
                 class="btn btn-light btn-sm"
             >
                 📚 Mahasiswa
             </a>
 
             <a
-                href="/SI-AKADEMIK_BKPMPT6/public/mahasiswa/create"
+                href="<?= BASE_URL ?>/mahasiswa/create"
                 class="btn btn-light btn-sm"
             >
                 🧑🏻‍🎓 Tambah Mahasiswa
             </a>
 
             <a
-                href="/SI-AKADEMIK_BKPMPT6/public/logout"
+                href="<?= BASE_URL ?>/logout"
                 class="btn btn-warning btn-sm"
             >
                 🚪 Logout

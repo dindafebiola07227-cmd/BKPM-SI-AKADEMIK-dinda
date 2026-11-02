@@ -1,0 +1,24 @@
+$kind: http-request
+url: "{{baseUrl}}/api/mahasiswa/{{newId}}"
+method: PUT
+headers:
+  Accept: application/json
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "nim": "2401010",
+        "nama": "Dewi Lestari Putri",
+        "email": "dewi.putri@gmail.com",
+        "prodi_id": 2,
+        "angkatan": 2024
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code 200", function () { pm.response.to.have.status(200); });
+      pm.test("Response berformat JSON", function () { pm.response.to.be.json; });
+      pm.test("success = true", function () { pm.expect(pm.response.json().success).to.eql(true); });
+    language: text/javascript
+order: 4000

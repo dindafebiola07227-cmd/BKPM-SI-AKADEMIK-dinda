@@ -1,0 +1,31 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/mahasiswa"
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "nim": "{{nimBaru}}",
+        "nama": "Andi Saputra",
+        "prodi": "Teknik Informatika"
+      }
+response:
+  statusCode: 201
+  statusText: Created
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+          "success": true,
+          "message": "Data berhasil ditambahkan",
+          "data": {
+              "id": 1
+          },
+          "timestamp": "2026-11-01T00:30:05+07:00"
+      }
+order: 1000

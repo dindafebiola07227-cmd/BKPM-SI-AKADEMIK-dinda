@@ -1,0 +1,8 @@
+$kind: collection
+description: |-
+  Pengujian RESTful API Mahasiswa (GET, POST, PUT, DELETE) beserta skenario error.
+
+  Set variable baseUrl sesuai server, mis. http://localhost/si-akademik/public atau http://127.0.0.1:8000. Jalankan folder 1 berurutan (POST menyimpan newId untuk PUT & DELETE).
+variables:
+  baseUrl: http://localhost/si-akademik/public
+  newId: "1"
