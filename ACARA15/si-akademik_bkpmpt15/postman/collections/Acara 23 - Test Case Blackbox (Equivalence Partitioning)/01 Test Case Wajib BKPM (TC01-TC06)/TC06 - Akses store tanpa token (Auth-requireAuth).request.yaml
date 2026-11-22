@@ -1,0 +1,20 @@
+$kind: http-request
+name: TC06 - Akses store tanpa token (Auth::requireAuth)
+description: |-
+  Data uji: tanpa header Authorization
+  Hasil diharapkan: 401
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: '{"nim": "220100999", "nama": "Budi Santoso", "prodi": "Informatika"}'
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC06: Akses store tanpa token (Auth::requireAuth) -> status 401", function () {
+          pm.expect(pm.response.code).to.be.oneOf([401]);
+      });
+    language: text/javascript
+order: 6000

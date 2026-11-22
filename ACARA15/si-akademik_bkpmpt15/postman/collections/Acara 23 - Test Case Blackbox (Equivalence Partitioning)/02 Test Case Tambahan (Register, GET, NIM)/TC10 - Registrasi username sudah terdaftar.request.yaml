@@ -1,0 +1,19 @@
+$kind: http-request
+description: |-
+  Data uji: username=penguji (sudah ada)
+  Hasil diharapkan: 409 / 422
+url: "{{base_url}}/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: '{"username": "penguji", "email": "lain@example.com", "password": "Pass12345"}'
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC10: Registrasi username sudah terdaftar -> status 409 / 422", function () {
+          pm.expect(pm.response.code).to.be.oneOf([409, 422]);
+      });
+    language: text/javascript
+order: 4000

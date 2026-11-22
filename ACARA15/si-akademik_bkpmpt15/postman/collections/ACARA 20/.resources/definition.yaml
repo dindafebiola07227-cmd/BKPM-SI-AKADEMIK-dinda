@@ -1,0 +1,8 @@
+$kind: collection
+description: "Jalankan berurutan 1 sampai 8. Request 1 (login) menyimpan token otomatis ke tokenA20; request 2 menyimpan id ke idA20. Token berlaku 5 menit: kalau muncul 401 padahal tokennya benar, kirim ulang request 1."
+variables:
+  baseA20: http://localhost/BKPM/ACARA20/si-akademik_bkpmpt20
+  tokenA20: ""
+  tokenRusakA20: ""
+  idA20: ""
+  nimA20: "220100001"

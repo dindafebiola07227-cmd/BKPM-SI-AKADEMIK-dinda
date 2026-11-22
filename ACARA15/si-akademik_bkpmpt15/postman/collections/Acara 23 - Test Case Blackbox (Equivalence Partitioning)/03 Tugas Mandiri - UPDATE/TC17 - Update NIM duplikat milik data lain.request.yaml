@@ -1,0 +1,22 @@
+$kind: http-request
+description: |-
+  Data uji: id=ID-B, nim=220100202
+  Hasil diharapkan: 422
+url: "{{base_url}}/mahasiswa?id={{idB}}"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+queryParams:
+  id: "{{idB}}"
+body:
+  type: text
+  content: '{"nim": "220100202", "nama": "Budi Santoso", "prodi": "Informatika"}'
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC17: Update NIM duplikat milik data lain -> status 422", function () {
+          pm.expect(pm.response.code).to.be.oneOf([422]);
+      });
+    language: text/javascript
+order: 6000

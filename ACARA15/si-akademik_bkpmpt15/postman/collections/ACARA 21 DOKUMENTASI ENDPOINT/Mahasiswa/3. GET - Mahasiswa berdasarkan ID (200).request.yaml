@@ -1,0 +1,21 @@
+$kind: http-request
+description: |-
+  Controller: MahasiswaController::index()
+  Contoh response tersimpan pada tab Examples.
+url: "{{base_url}}/mahasiswa?id={{mhsId}}"
+method: GET
+queryParams:
+  id: "{{mhsId}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 200', () => pm.response.to.have.status(200));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = true', () => pm.expect(j.success).to.eql(true));
+      pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("Data berhasil diambil"));
+      pm.test('NIM sesuai', () => pm.expect(j.data.nim).to.eql(pm.collectionVariables.get('nimBaru')));
+    language: text/javascript
+examples: ./.resources/3. GET - Mahasiswa berdasarkan ID (200).resources/examples
+order: 3000

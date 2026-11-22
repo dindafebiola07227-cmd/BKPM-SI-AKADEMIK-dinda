@@ -1,4 +1,4 @@
 name: Staging
 values:
   - key: base_url
-    value: 'http://127.0.0.1/BKPM/ACARA19/si-akademik_bkpmpt19/public'
+    value: 'http://127.0.0.1/BKPM/ACARA23/si-akademik_bkpmpt23/public'

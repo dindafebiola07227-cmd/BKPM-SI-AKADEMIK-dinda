@@ -1,0 +1,3 @@
+$kind: collection
+description: "Menguji Auth::requireAdmin(): role user -> 403, role admin -> sukses."
+order: 4000

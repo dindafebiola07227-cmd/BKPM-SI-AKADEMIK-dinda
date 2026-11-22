@@ -1,0 +1,16 @@
+$kind: http-request
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: '{"nim": "220100201", "nama": "Data Seed B", "prodi": "Informatika"}'
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Seed B dibuat (201)", function () { pm.response.to.have.status(201); });
+      pm.collectionVariables.set("idB", pm.response.json().data.id);
+    language: text/javascript
+order: 4000

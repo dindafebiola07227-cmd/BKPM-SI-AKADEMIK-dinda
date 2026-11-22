@@ -1,0 +1,19 @@
+$kind: http-request
+description: |-
+  Data uji: id=0
+  Hasil diharapkan: 400
+url: "{{base_url}}/mahasiswa?id=0"
+method: DELETE
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+queryParams:
+  id: "0"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC24: Hapus ID tidak valid (nol) -> status 400", function () {
+          pm.expect(pm.response.code).to.be.oneOf([400]);
+      });
+    language: text/javascript
+order: 4000

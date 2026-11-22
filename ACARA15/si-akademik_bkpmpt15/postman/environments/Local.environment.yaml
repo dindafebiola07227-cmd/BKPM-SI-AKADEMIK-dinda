@@ -1,4 +1,4 @@
 name: Local
 values:
   - key: base_url
-    value: 'http://localhost/BKPM/ACARA19/si-akademik_bkpmpt19/public'
+    value: 'http://localhost/BKPM/ACARA23/si-akademik_bkpmpt23/public'

@@ -1,0 +1,26 @@
+$kind: collection
+description: Pengujian manual Acara 23 untuk AuthController dan MahasiswaController. Jalankan SQL database/reset_pengujian.sql, pilih environment, lalu jalankan folder dari atas ke bawah. Status Pass/Fail tampil pada tab Test Results.
+variables:
+  - key: token
+    value: ""
+    disabled: false
+    secret: false
+  - key: idA
+    value: ""
+    disabled: false
+    secret: false
+  - key: idB
+    value: ""
+    disabled: false
+    secret: false
+  - key: idC
+    value: ""
+    disabled: false
+    secret: false
+  - key: token_kedaluwarsa
+    value: "{{json_web_token_01f9}}"
+    disabled: false
+    secret: false
+  - key: json_web_token_01f9
+    secret: true
+    disabled: false

@@ -1,0 +1,4 @@
+name: ACARA25 Local Copy
+values:
+  - key: base_url
+    value: 'http://localhost/BKPM/ACARA25/si-akademik_bkpmpt25/public'

@@ -1,0 +1,21 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/mahasiswa?id=999999"
+  method: GET
+  queryParams:
+    id: "999999"
+response:
+  statusCode: 404
+  statusText: Not Found
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+          "success": false,
+          "message": "Data tidak ditemukan",
+          "data": null,
+          "timestamp": "2026-11-01T00:30:05+07:00"
+      }
+order: 1000

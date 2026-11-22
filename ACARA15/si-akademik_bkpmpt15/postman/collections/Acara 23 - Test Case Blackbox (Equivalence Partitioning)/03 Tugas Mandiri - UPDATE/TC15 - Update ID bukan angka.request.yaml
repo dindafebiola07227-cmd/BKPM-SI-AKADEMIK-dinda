@@ -1,0 +1,22 @@
+$kind: http-request
+description: |-
+  Data uji: id=abc
+  Hasil diharapkan: 400
+url: "{{base_url}}/mahasiswa?id=abc"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+queryParams:
+  id: abc
+body:
+  type: text
+  content: '{"nim": "220100301", "nama": "Budi Santoso", "prodi": "Informatika"}'
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC15: Update ID bukan angka -> status 400", function () {
+          pm.expect(pm.response.code).to.be.oneOf([400]);
+      });
+    language: text/javascript
+order: 4000

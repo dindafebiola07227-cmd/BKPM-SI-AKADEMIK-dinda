@@ -1,14 +1,14 @@
 # Panduan Pengujian Acara 20 (API Authentication dan Error Handling)
 
 ## A. Persiapan
-1. Folder berada di `C:\xampp\htdocs\BKPM\ACARA20\si-akademik_bkpmpt20\`.
+1. Folder berada di `C:\xampp\htdocs\BKPM\ACARA20\si-akademik_bkpmpt20\` (atau jalankan `jalankan.bat` untuk memakai `php -S` tanpa Apache).
 2. XAMPP: nyalakan **Apache** dan **MySQL**.
 3. Database `db_workshop` dari Acara 19 dipakai apa adanya (tabel `users` sudah ada). Tidak perlu impor ulang.
-4. Cek di browser: `.../public/mahasiswa` harus tampil JSON `"success": true` (GET masih publik).
-5. Cek di browser: `.../public/login` (GET) harus tampil `405 Method tidak diizinkan`.
+4. Cek di browser: `.../si-akademik_bkpmpt20/` (alamat dasar) harus tampil JSON "API ... berjalan", dan `.../mahasiswa` harus tampil `"success": true` (GET masih publik).
+5. Cek di browser: `.../login` (GET) harus tampil `405 Method tidak diizinkan`.
 
 ## B. Import ke Postman
-Import 3 file dari folder `docs/`: collection, `Environment_Local`, `Environment_Staging`. Pilih environment **Local**.
+Import file dari folder `postman/`: collection, `Local`, `Local (php -S 8080)`, dan `Staging`. Pilih environment **Local** (Apache) atau **Local (php -S 8080)** (jika memakai `jalankan.bat`).
 
 ## C. Pengujian manual sesuai Langkah 6
 1. Register akun (atau pakai akun dari Acara 19): `POST {{base_url}}/register`.
@@ -25,7 +25,7 @@ Collection -> **Run** -> jalankan dari atas ke bawah. Urutan folder penting:
 |---|---|---|
 | Auth (Acara 19) | 8 request | membuat akun uji `{{unameBaru}}` |
 | Login (Acara 20) | 7 request | request no. 1 menyimpan token ke `{{token}}` |
-| Proteksi Token (Acara 20) | 7 request | tanpa token, token diubah, token acak, skema Basic -> 401; GET tetap 200 |
+| Proteksi Token (Acara 20) | 8 request | tanpa token, token diubah, token acak, skema Basic, token kedaluwarsa -> 401; GET tetap 200 |
 | Mahasiswa | 16 request | POST/PUT/DELETE kini membawa `Bearer {{token}}` |
 
 Jangan menjalankan folder Login sendirian pada sesi baru: akun `{{unameBaru}}` dibuat oleh request no. 1 folder Auth.
@@ -40,16 +40,17 @@ Jangan menjalankan folder Login sendirian pada sesi baru: akun `{{unameBaru}}` d
 | 6 | Body bukan JSON | 400 |
 | 7 | GET /login | 405 |
 
-Jumlah assertion pada Runner tidak saya klaim di sini karena belum dijalankan; catat angka dari Runner milikmu untuk laporan.
+Hasil yang benar pada Runner: **39 request, 228 assertion, 0 gagal** (sudah diverifikasi dengan Newman). Catat juga angka dari Runner milikmu untuk laporan.
 
 ## E. Tugas Praktik Mandiri
-1. **Diskusi JWT stateless dan logout:** jawaban lengkap ada di `docs/TUGAS_MANDIRI.md`.
+1. **Diskusi JWT stateless dan logout:** jawaban lengkap ada di `TUGAS_MANDIRI.md` (folder utama).
 2. **Token 5 menit** (`Auth::TOKEN_TTL = 300`). Cara mengamati token kedaluwarsa:
    1. Login, catat jam saat token diterima.
    2. Kirim `POST /mahasiswa` dengan token itu sebelum 5 menit -> 201.
    3. Tunggu lebih dari 5 menit tanpa login ulang, kirim request yang sama -> **401** "Token tidak valid atau kedaluwarsa".
    4. Login lagi, pakai token baru -> 201.
    Tips agar tidak menunggu lama: sementara ubah `TOKEN_TTL` menjadi `20`, uji, lalu kembalikan ke `300`.
+   Collection juga punya uji otomatis **Proteksi Token no. 7** (token kedaluwarsa, tanda tangan sah) yang selalu menghasilkan 401, sebagai pelengkap pengamatan menunggu 5 menit.
 
 ## F. Bukti di database
 phpMyAdmin -> `db_workshop` -> tabel `users` -> Browse: kolom `password` berawalan `$2y$10$`. Token **tidak** disimpan di database (stateless).

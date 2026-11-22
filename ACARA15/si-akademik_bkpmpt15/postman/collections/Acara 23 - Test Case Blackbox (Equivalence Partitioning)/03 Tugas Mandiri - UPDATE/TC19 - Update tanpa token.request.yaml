@@ -1,0 +1,21 @@
+$kind: http-request
+description: |-
+  Data uji: id=ID-B, tanpa Authorization
+  Hasil diharapkan: 401
+url: "{{base_url}}/mahasiswa?id={{idB}}"
+method: PUT
+headers:
+  Content-Type: application/json
+queryParams:
+  id: "{{idB}}"
+body:
+  type: text
+  content: '{"nim": "220100302", "nama": "Budi Santoso", "prodi": "Informatika"}'
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC19: Update tanpa token -> status 401", function () {
+          pm.expect(pm.response.code).to.be.oneOf([401]);
+      });
+    language: text/javascript
+order: 8000

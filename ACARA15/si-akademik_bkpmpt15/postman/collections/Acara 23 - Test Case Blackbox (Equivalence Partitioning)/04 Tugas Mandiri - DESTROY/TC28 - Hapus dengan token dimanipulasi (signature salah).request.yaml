@@ -1,0 +1,19 @@
+$kind: http-request
+description: |-
+  Data uji: id=ID-B, signature diubah
+  Hasil diharapkan: 401
+url: "{{base_url}}/mahasiswa?id={{idB}}"
+method: DELETE
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}abc
+queryParams:
+  id: "{{idB}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC28: Hapus dengan token dimanipulasi (signature salah) -> status 401", function () {
+          pm.expect(pm.response.code).to.be.oneOf([401]);
+      });
+    language: text/javascript
+order: 8000

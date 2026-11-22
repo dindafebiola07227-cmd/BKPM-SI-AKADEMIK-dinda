@@ -1,0 +1,23 @@
+$kind: http-request
+name: TC12 - Update data valid (MahasiswaController::update)
+description: |-
+  Data uji: id=ID-A, nim=220100210 (baru)
+  Hasil diharapkan: 200
+url: "{{base_url}}/mahasiswa?id={{idA}}"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+queryParams:
+  id: "{{idA}}"
+body:
+  type: text
+  content: '{"nim": "220100210", "nama": "Seed A Diubah", "prodi": "Sistem Informasi"}'
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC12: Update data valid (MahasiswaController::update) -> status 200", function () {
+          pm.expect(pm.response.code).to.be.oneOf([200]);
+      });
+    language: text/javascript
+order: 1000

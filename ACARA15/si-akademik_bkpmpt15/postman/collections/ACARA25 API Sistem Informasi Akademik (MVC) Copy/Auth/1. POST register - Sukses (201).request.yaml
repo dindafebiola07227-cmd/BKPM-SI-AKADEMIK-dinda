@@ -1,0 +1,37 @@
+$kind: http-request
+description: |-
+  Controller: AuthController::register()
+  Contoh response tersimpan pada tab Examples.
+url: "{{base_url}}/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "{{unameBaru}}",
+      "email": "{{emailBaru}}",
+      "password": "RahasiaUji123"
+    }
+scripts:
+  - type: beforeRequest
+    code: |-
+      // Username & email acak supaya collection bisa dijalankan berulang kali
+      const u = 'uji_' + Date.now();
+      pm.collectionVariables.set('unameBaru', u);
+      pm.collectionVariables.set('emailBaru', u + '@gmail.com');
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 201', () => pm.response.to.have.status(201));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = true', () => pm.expect(j.success).to.eql(true));
+      pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("Registrasi berhasil"));
+      pm.test('data.id berupa angka', () => pm.expect(j.data.id).to.be.a('number'));
+      pm.test('hash password tidak dikembalikan ke client', () => { pm.expect(pm.response.text()).to.not.include('$2y$'); pm.expect(j.data).to.not.have.property('password'); });
+    language: text/javascript
+examples: ./.resources/1. POST register - Sukses (201).resources/examples
+order: 1000

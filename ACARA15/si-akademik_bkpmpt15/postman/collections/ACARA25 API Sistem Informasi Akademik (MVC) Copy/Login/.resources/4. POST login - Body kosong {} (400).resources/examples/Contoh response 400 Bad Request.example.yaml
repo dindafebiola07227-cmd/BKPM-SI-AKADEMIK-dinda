@@ -1,0 +1,32 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/login"
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: "{}"
+response:
+  statusCode: 400
+  statusText: Bad Request
+  headers:
+    Content-Type: application/json; charset=utf-8
+  body:
+    type: json
+    content: |-
+      {
+          "success": false,
+          "message": "Username dan password wajib diisi",
+          "data": null,
+          "errors": {
+              "username": [
+                  "Username wajib diisi"
+              ],
+              "password": [
+                  "Password wajib diisi"
+              ]
+          },
+          "timestamp": "2026-11-18T19:00:35+07:00"
+      }
+order: 1000

@@ -1,0 +1,27 @@
+$kind: http-request
+url: "{{baseA20}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{tokenA20}}
+body:
+  type: json
+  content: |-
+    {
+      "nim": "{{nimA20}}",
+      "nama": "Andi Saputra",
+      "prodi": "Teknik Informatika"
+    }
+scripts:
+  - type: beforeRequest
+    code: |-
+      // NIM acak 9 digit supaya tidak kena 409 (duplikat)
+      pm.collectionVariables.set('nimA20', String(Math.floor(100000000 + Math.random()*900000000)));
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      pm.test('Status 201', () => pm.response.to.have.status(201));
+      // id disimpan otomatis untuk request GET by id, PUT, dan DELETE
+      pm.collectionVariables.set('idA20', pm.response.json().data.id);
+    language: text/javascript
+order: 2000

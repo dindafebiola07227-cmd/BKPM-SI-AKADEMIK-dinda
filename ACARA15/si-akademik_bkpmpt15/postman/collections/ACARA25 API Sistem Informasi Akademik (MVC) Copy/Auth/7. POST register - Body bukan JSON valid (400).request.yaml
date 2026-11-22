@@ -1,0 +1,23 @@
+$kind: http-request
+description: |-
+  Controller: AuthController::register()
+  Contoh response tersimpan pada tab Examples.
+url: "{{base_url}}/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: "{username: x, email:"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 400', () => pm.response.to.have.status(400));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = false', () => pm.expect(j.success).to.eql(false));
+      pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("Body request harus berupa JSON yang valid"));
+    language: text/javascript
+examples: ./.resources/7. POST register - Body bukan JSON valid (400).resources/examples
+order: 7000

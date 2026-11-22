@@ -1,0 +1,19 @@
+$kind: http-request
+description: Akun ini terdaftar sebagai role user. Jalankan database/jadikan_admin.sql satu kali di phpMyAdmin agar role-nya menjadi admin.
+url: "{{base_url}}/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "{{adminUname}}",
+      "email": "admin_uji@gmail.com",
+      "password": "{{adminPass}}"
+    }
+scripts:
+  - type: afterResponse
+    code: pm.test('201 (baru) atau 409 (sudah ada)', () => pm.expect([201,409]).to.include(pm.response.code));
+    language: text/javascript
+order: 1000

@@ -1,0 +1,20 @@
+$kind: http-request
+description: |-
+  Controller: MahasiswaController::index()
+  Contoh response tersimpan pada tab Examples.
+url: "{{base_url}}/mahasiswa?id={{mhsId}}"
+method: GET
+queryParams:
+  id: "{{mhsId}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 404', () => pm.response.to.have.status(404));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = false', () => pm.expect(j.success).to.eql(false));
+      pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("Data tidak ditemukan"));
+    language: text/javascript
+examples: ./.resources/14. GET - Setelah dihapus (404).resources/examples
+order: 14000

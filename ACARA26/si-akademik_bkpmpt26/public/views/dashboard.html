@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard - Sistem Informasi Akademik</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Acara 25 - Langkah 4: halaman dilindungi; tanpa token langsung kembali ke login -->
+    <script>
+        if (!localStorage.getItem('token')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+</head>
+<body>
+    <div class="kontainer">
+        <div class="kartu bar">
+            <div>
+                <h1>Dashboard</h1>
+                Masuk sebagai <b id="info-user"></b> <span class="badge" id="info-role"></span>
+            </div>
+            <!-- Tugas mandiri 1: tombol Logout -->
+            <button type="button" class="abu" id="btn-logout">Logout</button>
+        </div>
+
+        <!-- Langkah 5: ringkasan data -->
+        <div class="kartu ringkasan">
+            Total mahasiswa: <b id="total-mhs">-</b>
+        </div>
+
+        <div class="kartu">
+            <div class="bar">
+                <h1>Data Mahasiswa</h1>
+                <button type="button" id="btn-tambah">Tambah</button>
+            </div>
+
+            <form id="form-mhs" hidden>
+                <input type="hidden" id="mhs-id">
+                <label for="mhs-nim">NIM</label>
+                <input type="text" id="mhs-nim" maxlength="15" required>
+                <label for="mhs-nama">Nama</label>
+                <input type="text" id="mhs-nama" maxlength="100" required>
+                <label for="mhs-prodi">Program Studi</label>
+                <input type="text" id="mhs-prodi" maxlength="50" required>
+                <!-- Acara 26 - Langkah 5: input berkas foto (opsional) -->
+                <label for="mhs-foto">Foto (JPG/PNG, maks. 2 MB)</label>
+                <input type="file" id="mhs-foto" accept="image/jpeg,image/png">
+                <small id="petunjuk-foto" class="petunjuk"></small>
+                <p>
+                    <button type="submit">Simpan</button>
+                    <button type="button" class="abu" id="btn-batal">Batal</button>
+                </p>
+            </form>
+
+            <table id="tabel-mahasiswa">
+                <thead><tr><th>Foto</th><th>NIM</th><th>Nama</th><th>Program Studi</th><th class="kolom-aksi">Aksi</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

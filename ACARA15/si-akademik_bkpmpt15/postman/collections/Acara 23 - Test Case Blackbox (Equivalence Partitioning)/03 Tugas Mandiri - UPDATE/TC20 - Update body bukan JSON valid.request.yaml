@@ -1,0 +1,22 @@
+$kind: http-request
+description: |-
+  Data uji: body = teks biasa
+  Hasil diharapkan: 400
+url: "{{base_url}}/mahasiswa?id={{idB}}"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+queryParams:
+  id: "{{idB}}"
+body:
+  type: text
+  content: bukan json
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC20: Update body bukan JSON valid -> status 400", function () {
+          pm.expect(pm.response.code).to.be.oneOf([400]);
+      });
+    language: text/javascript
+order: 9000

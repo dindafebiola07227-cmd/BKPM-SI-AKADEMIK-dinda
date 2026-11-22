@@ -27,6 +27,21 @@ class Router
             $_GET['id'] = $last;
         }
 
+        // Halaman cek koneksi: alamat dasar (berakhir "/"), /public, /index.php, atau /ping
+        // (membantu memastikan Apache / php -S sudah berjalan sebelum menguji lewat Postman)
+        $path = (string) parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        if ($resource === null && (substr($path, -1) === '/' || in_array($last, ['public', 'index.php', 'ping'], true))) {
+            Response::json(200, true, 'API Sistem Informasi Akademik (Acara 20) berjalan', [
+                'endpoints' => [
+                    'POST /register',
+                    'POST /login',
+                    'GET /mahasiswa, GET /mahasiswa?id=1',
+                    'POST|PUT|DELETE /mahasiswa (butuh Bearer token)',
+                    'GET|POST|PUT|DELETE /buku',
+                ],
+            ]);
+        }
+
         if ($resource === null) {
             Response::json(404, false, 'Endpoint tidak ditemukan');
         }

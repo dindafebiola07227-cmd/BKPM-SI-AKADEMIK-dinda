@@ -1,0 +1,32 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/register"
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: text
+    content: '{"username": "penguji", "email": "penguji@example.com", "password": "Rahasia123"}'
+response:
+  statusCode: 201
+  statusText: Created
+  headers:
+    Date: Sat, 21 Nov 2026 19:06:48 GMT
+    Server: Apache/2.4.58 (Win64) OpenSSL/3.1.3 PHP/8.2.12
+    X-Powered-By: PHP/8.2.12
+    Content-Length: "144"
+    Keep-Alive: timeout=5, max=100
+    Connection: Keep-Alive
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": true,
+        "message": "Registrasi berhasil",
+        "data": {
+          "id": 6
+        },
+        "timestamp": "2026-11-22T02:06:51+07:00"
+      }
+order: 1000

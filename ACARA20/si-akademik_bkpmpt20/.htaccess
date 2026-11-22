@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# Acara 20: teruskan header Authorization (Bearer token) ke PHP
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Semua request diarahkan ke folder public/ agar URL cukup .../si-akademik_bkpmpt20/mahasiswa
+RewriteRule ^$ public/ [L]
+RewriteRule ^(?!public/)(.*)$ public/$1 [L]

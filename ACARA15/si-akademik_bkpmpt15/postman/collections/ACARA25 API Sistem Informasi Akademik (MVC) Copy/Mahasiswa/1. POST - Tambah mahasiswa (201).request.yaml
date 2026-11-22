@@ -1,0 +1,37 @@
+$kind: http-request
+description: |-
+  Controller: MahasiswaController::store()
+  Memerlukan header Authorization: Bearer <token> (Auth::requireAdmin()).
+  Contoh response tersimpan pada tab Examples.
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{adminToken}}
+body:
+  type: json
+  content: |-
+    {
+      "nim": "{{nimBaru}}",
+      "nama": "Andi Saputra",
+      "prodi": "Teknik Informatika"
+    }
+scripts:
+  - type: beforeRequest
+    code: |-
+      // NIM acak 9 digit
+      pm.collectionVariables.set('nimBaru', '22' + String(Date.now()).slice(-7));
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 201', () => pm.response.to.have.status(201));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = true', () => pm.expect(j.success).to.eql(true));
+      pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("Data berhasil ditambahkan"));
+      pm.test('data.id berupa angka', () => pm.expect(j.data.id).to.be.a('number'));
+      pm.collectionVariables.set('mhsId', j.data.id);
+    language: text/javascript
+examples: ./.resources/1. POST - Tambah mahasiswa (201).resources/examples
+order: 1000

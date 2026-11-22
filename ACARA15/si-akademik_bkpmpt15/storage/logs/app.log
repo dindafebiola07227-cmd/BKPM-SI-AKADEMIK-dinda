@@ -1,0 +1,6 @@
+2026-11-21 14:30:02 - SQLSTATE[42S02]: Base table or view not found: 1932 Table 'si_akademik10.mahasiswa' doesn't exist in engine
+2026-11-21 14:30:09 - SQLSTATE[42S02]: Base table or view not found: 1932 Table 'si_akademik10.mahasiswa' doesn't exist in engine
+2026-11-21 14:30:13 - SQLSTATE[42S02]: Base table or view not found: 1932 Table 'si_akademik10.mahasiswa' doesn't exist in engine
+2026-11-21 14:30:24 - SQLSTATE[42S02]: Base table or view not found: 1932 Table 'si_akademik10.prodi' doesn't exist in engine (C:\xampp\htdocs\BKPM\ACARA15\si-akademik_bkpmpt15\app\Models\ProdiModel.php:24)
+2026-11-21 14:30:36 - SQLSTATE[42S02]: Base table or view not found: 1932 Table 'si_akademik10.matakuliah' doesn't exist in engine (C:\xampp\htdocs\BKPM\ACARA15\si-akademik_bkpmpt15\app\Models\MatakuliahModel.php:25)
+2026-11-21 14:30:54 - SQLSTATE[42S02]: Base table or view not found: 1932 Table 'si_akademik10.mahasiswa' doesn't exist in engine

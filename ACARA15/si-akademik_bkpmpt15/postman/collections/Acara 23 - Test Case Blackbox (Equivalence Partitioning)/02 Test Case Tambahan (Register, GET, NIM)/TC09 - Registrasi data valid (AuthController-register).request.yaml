@@ -1,0 +1,20 @@
+$kind: http-request
+name: TC09 - Registrasi data valid (AuthController::register)
+description: |-
+  Data uji: username=user_baru
+  Hasil diharapkan: 201
+url: "{{base_url}}/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: '{"username": "user_baru", "email": "baru@example.com", "password": "Pass12345"}'
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC09: Registrasi data valid (AuthController::register) -> status 201", function () {
+          pm.expect(pm.response.code).to.be.oneOf([201]);
+      });
+    language: text/javascript
+order: 3000

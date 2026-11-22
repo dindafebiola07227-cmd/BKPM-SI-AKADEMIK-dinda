@@ -1,12 +1,17 @@
 # Dokumentasi Endpoint - Acara 20 (API Authentication dan Error Handling)
 
-**Base URL (Environment Local):** `http://localhost/BKPM/ACARA20/si-akademik_bkpmpt20/public`
-**Base URL (Environment Staging):** `http://127.0.0.1/BKPM/ACARA20/si-akademik_bkpmpt20/public`
+**Base URL (Environment Local):** `http://localhost/BKPM/ACARA20/si-akademik_bkpmpt20`
+**Base URL (Environment Staging):** `http://127.0.0.1/BKPM/ACARA20/si-akademik_bkpmpt20`
+**Base URL (Environment Local (php -S 8080)):** `http://localhost:8080` (dari `jalankan.bat`)
 Pada Postman, alamat ditulis `{{base_url}}/...`.
 
 Semua response memakai format seragam dari `Response::json()`:
 `success`, `message`, `data`, `errors` (hanya saat validasi gagal), `timestamp`.
 Contoh nilai di bawah dibuat dari kode program; gunakan hasil asli Postman untuk screenshot laporan.
+
+## Cek koneksi
+
+`GET /` (alamat dasar), `/public`, `/index.php`, atau `/ping` membalas `200` dengan daftar endpoint. Berguna untuk memastikan Apache / `php -S` sudah berjalan.
 
 ## Ringkasan akses
 
@@ -104,10 +109,11 @@ Lihat dokumentasi Acara 19: sukses 201, gagal 400/409/422/405.
 
 | Environment | Variabel | Nilai |
 |---|---|---|
-| Local | `base_url` | `http://localhost/BKPM/ACARA20/si-akademik_bkpmpt20/public` |
-| Staging | `base_url` | `http://127.0.0.1/BKPM/ACARA20/si-akademik_bkpmpt20/public` |
+| Local | `base_url` | `http://localhost/BKPM/ACARA20/si-akademik_bkpmpt20` |
+| Local (php -S 8080) | `base_url` | `http://localhost:8080` |
+| Staging | `base_url` | `http://127.0.0.1/BKPM/ACARA20/si-akademik_bkpmpt20` |
 
-Variabel `token` dan `tokenRusak` diisi otomatis oleh request login (collection variable).
+Variabel `token` dan `tokenRusak` diisi otomatis oleh request login (collection variable). `tokenKedaluwarsa` adalah token tetap (tanda tangan sah, `exp` sudah lewat) untuk uji 401 kedaluwarsa. Environment sengaja **tidak** memuat variabel `token`, karena variabel environment akan menimpa collection variable.
 
 ## Diagram
 - Alur login, proteksi token, dan error handling: `diagram_alur_login.png`

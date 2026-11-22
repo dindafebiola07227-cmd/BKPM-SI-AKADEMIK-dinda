@@ -1,0 +1,19 @@
+$kind: http-request
+description: |-
+  Data uji: id=999999
+  Hasil diharapkan: 404
+url: "{{base_url}}/mahasiswa?id=999999"
+method: DELETE
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+queryParams:
+  id: "999999"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC23: Hapus ID tidak ada di database -> status 404", function () {
+          pm.expect(pm.response.code).to.be.oneOf([404]);
+      });
+    language: text/javascript
+order: 3000

@@ -1,0 +1,43 @@
+$kind: collection
+description: 'Collection Acara 21 (Dokumentasi API), lanjutan Acara 20. Setiap request berisi Description (Controller::method) dan contoh response pada tab Examples. Pilih Environment "Local" (Apache/XAMPP), "Local (php -S 8080)" (jalankan.bat) atau "Staging". Jalankan lewat Runner dari atas ke bawah: folder Auth membuat akun uji, folder Login mengambil token (disimpan otomatis ke {{token}}), folder Proteksi Token menguji penolakan 401 (tanpa token, token diubah, token acak, skema bukan Bearer, token kedaluwarsa), lalu folder Mahasiswa memakai token tersebut pada POST/PUT/DELETE. Token berlaku 5 menit (Tugas Mandiri 2).'
+variables:
+  - key: mhsId
+    value: "999999"
+    disabled: false
+    secret: false
+  - key: nimBaru
+    value: "220100001"
+    disabled: false
+    secret: false
+  - key: unameBaru
+    value: uji_awal
+    disabled: false
+    secret: false
+  - key: emailBaru
+    value: uji_awal@gmail.com
+    disabled: false
+    secret: false
+  - key: token
+    value: ""
+    disabled: false
+    secret: false
+  - key: tokenRusak
+    value: ""
+    disabled: false
+    secret: false
+  - key: tokenKedaluwarsa
+    value: "{{json_web_token_01f9}}"
+    disabled: false
+    secret: false
+  - key: json_web_token_01f9
+    secret: true
+    disabled: false
+  - key: json_web_token_16ol
+    secret: true
+    disabled: false
+  - key: bearer_token_14lb
+    secret: true
+    disabled: false
+  - key: basic_auth_02jx
+    secret: true
+    disabled: false

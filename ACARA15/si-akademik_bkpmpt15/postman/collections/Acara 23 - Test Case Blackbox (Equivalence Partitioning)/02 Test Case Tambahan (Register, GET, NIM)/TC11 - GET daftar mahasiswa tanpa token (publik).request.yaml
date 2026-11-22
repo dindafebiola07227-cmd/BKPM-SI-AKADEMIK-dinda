@@ -1,0 +1,16 @@
+$kind: http-request
+description: |-
+  Data uji: GET /mahasiswa
+  Hasil diharapkan: 200
+url: "{{base_url}}/mahasiswa"
+method: GET
+headers:
+  Content-Type: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC11: GET daftar mahasiswa tanpa token (publik) -> status 200", function () {
+          pm.expect(pm.response.code).to.be.oneOf([200]);
+      });
+    language: text/javascript
+order: 5000

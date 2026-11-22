@@ -1,0 +1,33 @@
+$kind: http-request
+description: |-
+  Controller: MahasiswaController::update()
+  Memerlukan header Authorization: Bearer <token> (Auth::requireAdmin()).
+  Contoh response tersimpan pada tab Examples.
+url: "{{base_url}}/mahasiswa?id={{mhsId}}"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{adminToken}}
+queryParams:
+  id: "{{mhsId}}"
+body:
+  type: json
+  content: |-
+    {
+      "nim": "{{nimBaru}}",
+      "nama": "Andi Saputra Pratama",
+      "prodi": "Sistem Informasi"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 200', () => pm.response.to.have.status(200));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = true', () => pm.expect(j.success).to.eql(true));
+      pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("Data berhasil diperbarui"));
+      pm.test('nama berubah', () => pm.expect(j.data.nama).to.eql('Andi Saputra Pratama'));
+    language: text/javascript
+examples: ./.resources/4. PUT - Ubah mahasiswa (200).resources/examples
+order: 4000

@@ -1,0 +1,20 @@
+$kind: http-request
+description: |-
+  Data uji: nim=22010012
+  Hasil diharapkan: 422
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: '{"nim": "22010012", "nama": "Budi Santoso", "prodi": "Informatika"}'
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC08: NIM kurang dari 9 karakter (batas bawah) -> status 422", function () {
+          pm.expect(pm.response.code).to.be.oneOf([422]);
+      });
+    language: text/javascript
+order: 2000

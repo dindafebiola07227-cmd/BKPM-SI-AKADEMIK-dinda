@@ -1,0 +1,4 @@
+name: ACARA23
+values:
+  - key: base_url
+    value: 'http://localhost/BKPM/ACARA22/si-akademik_bkpmpt22/public'

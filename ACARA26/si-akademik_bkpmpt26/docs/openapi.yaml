@@ -1,0 +1,388 @@
+openapi: 3.0.0
+info:
+  title: API Sistem Informasi Akademik (MVC)
+  version: 1.0.0
+  description: >
+    Dokumentasi endpoint REST API Sistem Informasi Akademik untuk BKPM Acara 22.
+    Spesifikasi ini mengikuti peta Router dan implementasi Controller pada proyek.
+servers:
+  - url: http://localhost/BKPM/ACARA22/si-akademik_bkpmpt22/public
+    description: Server lokal XAMPP (Acara 22)
+
+tags:
+  - name: Autentikasi
+    description: Registrasi pengguna dan autentikasi untuk memperoleh JWT.
+  - name: Mahasiswa
+    description: Pengambilan dan pengelolaan data mahasiswa.
+
+paths:
+  /register:
+    post:
+      tags:
+        - Autentikasi
+      summary: Registrasi pengguna (AuthController::register)
+      description: Membuat akun pengguna baru. Password disimpan dalam bentuk hash dan tidak dikembalikan pada response.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            example:
+              username: pengguna_baru
+              email: pengguna@example.com
+              password: RahasiaUji123
+      responses:
+        '201':
+          description: Registrasi berhasil.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+              example:
+                success: true
+                message: Registrasi berhasil
+                data:
+                  id: 1
+                timestamp: '2026-11-20T10:00:00+07:00'
+        '400':
+          description: Body JSON tidak valid atau field wajib belum diisi.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Username atau email sudah terdaftar.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Format email tidak valid atau panjang field melebihi batas.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /login:
+    post:
+      tags:
+        - Autentikasi
+      summary: Autentikasi pengguna (AuthController::login)
+      description: Memverifikasi username dan password, kemudian mengembalikan JWT jika kredensial benar.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              username: pengguna_baru
+              password: RahasiaUji123
+      responses:
+        '200':
+          description: Login berhasil dan token diterbitkan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+              example:
+                success: true
+                message: Login berhasil
+                data:
+                  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example.signature
+                  role: user
+                  expires_in: 300
+                timestamp: '2026-11-20T10:00:00+07:00'
+        '400':
+          description: Body JSON tidak valid atau username/password belum diisi.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Username atau password salah.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /mahasiswa:
+    get:
+      tags:
+        - Mahasiswa
+      summary: Mengambil data mahasiswa (MahasiswaController::index)
+      description: Mengambil seluruh data mahasiswa. Untuk mengambil satu data, tambahkan query parameter id.
+      parameters:
+        - name: id
+          in: query
+          required: false
+          description: ID mahasiswa yang ingin diambil. Jika tidak diisi, seluruh data dikembalikan.
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Data mahasiswa berhasil diambil.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: ID harus berupa angka positif.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Data mahasiswa tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      tags:
+        - Mahasiswa
+      summary: Menambahkan data mahasiswa (MahasiswaController::store)
+      description: Menambahkan data mahasiswa. Wajib menyertakan Bearer Token milik pengguna dengan role admin.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MahasiswaRequest'
+            example:
+              nim: '240100001'
+              nama: Andi Saputra
+              prodi: Teknik Informatika
+      responses:
+        '201':
+          description: Data mahasiswa berhasil ditambahkan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Body JSON tidak valid atau field wajib belum diisi.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Token tidak ditemukan, tidak valid, atau kedaluwarsa.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Akses ditolak, hanya pengguna dengan role admin yang diizinkan (Auth::requireAdmin).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Format NIM tidak valid (harus 9 digit angka), NIM sudah terdaftar, atau panjang field melebihi batas.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      tags:
+        - Mahasiswa
+      summary: Memperbarui data mahasiswa (MahasiswaController::update)
+      description: Memperbarui data berdasarkan query parameter id. Wajib menyertakan Bearer Token milik pengguna dengan role admin.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: ID mahasiswa yang akan diperbarui.
+          schema:
+            type: integer
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MahasiswaRequest'
+            example:
+              nim: '240100001'
+              nama: Andi Saputra
+              prodi: Teknik Informatika
+      responses:
+        '200':
+          description: Data mahasiswa berhasil diperbarui.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: ID tidak valid, body JSON tidak valid, atau field wajib belum diisi.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Token tidak ditemukan, tidak valid, atau kedaluwarsa.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Akses ditolak, hanya pengguna dengan role admin yang diizinkan (Auth::requireAdmin).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Data mahasiswa tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Format NIM tidak valid (harus 9 digit angka), NIM sudah terdaftar, atau panjang field melebihi batas.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      tags:
+        - Mahasiswa
+      summary: Menghapus data mahasiswa (MahasiswaController::destroy)
+      description: Menghapus data berdasarkan query parameter id. Wajib menyertakan Bearer Token milik pengguna dengan role admin.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: ID mahasiswa yang akan dihapus.
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Data mahasiswa berhasil dihapus.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: ID tidak valid atau tidak diisi.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Token tidak ditemukan, tidak valid, atau kedaluwarsa.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Akses ditolak, hanya pengguna dengan role admin yang diizinkan (Auth::requireAdmin).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Data mahasiswa tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >
+        Masukkan JWT yang diperoleh dari POST /login. Token berlaku selama 300 detik (5 menit).
+
+  schemas:
+    RegisterRequest:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          maxLength: 100
+        password:
+          type: string
+          format: password
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          format: password
+    MahasiswaRequest:
+      type: object
+      required:
+        - nim
+        - nama
+        - prodi
+      properties:
+        nim:
+          type: string
+          minLength: 9
+          maxLength: 9
+          description: Controller memvalidasi NIM harus tepat 9 karakter.
+        nama:
+          type: string
+          maxLength: 100
+        prodi:
+          type: string
+          maxLength: 50
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+        data: {}
+        timestamp:
+          type: string
+          format: date-time
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+        data: {}
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        timestamp:
+          type: string
+          format: date-time

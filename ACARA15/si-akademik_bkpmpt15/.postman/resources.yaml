@@ -9,7 +9,12 @@ cloudResources:
     ../postman/collections/Acara 16 - RESTful API Mahasiswa: 321279ac-b5da-4b16-8072-7ff1bb352f35
     ../postman/collections/Acara 17 - Skeleton MVC (Mahasiswa & Buku): 9beb8167-3053-4d45-922c-2e947ce64880
     ../postman/collections/Acara 18 - JSON Encoding & HTTP Status Code (Response-json): c1c48c86-faf5-4bbb-9006-523217ddf2dd
-    ../postman/collections/API Sistem Informasi Akademik (MVC): e7b5952a-a807-40fa-a35a-212907d19868
+    ../postman/collections/ACARA 20 LAMA API Sistem Informasi Akademik (MVC): e7b5952a-a807-40fa-a35a-212907d19868
+    ../postman/collections/ACARA 21 DOKUMENTASI ENDPOINT: 954ead84-1cde-41f5-a311-577882524b64
+    ../postman/collections/Acara 20 - API Authentication dan Error Handling: ba47b234-d074-4c24-a6b4-af6dbe664cfa
+    ../postman/collections/API Sistem Informasi Akademik (MVC): 1b39a176-c7f7-4338-b06c-2973cc00088d
+    ../postman/collections/Acara 23 - Test Case Blackbox (Equivalence Partitioning): 8751d1d8-86ba-44f3-8616-487eec02ad7f
+    ../postman/collections/ACARA25 API Sistem Informasi Akademik (MVC) Copy: 48a8c99a-aeca-423e-99ab-729c8147bf2e
 
 # All resources in the `postman/` folder are automatically registered in Local View.
 # Point to additional files outside the `postman/` folder to register them individually. Example:

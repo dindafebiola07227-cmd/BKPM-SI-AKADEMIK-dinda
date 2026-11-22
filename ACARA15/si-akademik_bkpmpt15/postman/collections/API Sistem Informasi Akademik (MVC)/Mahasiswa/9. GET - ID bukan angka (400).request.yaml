@@ -1,0 +1,20 @@
+$kind: http-request
+description: |-
+  Controller: MahasiswaController::index()
+  Contoh response tersimpan pada tab Examples.
+url: "{{base_url}}/mahasiswa?id=abc"
+method: GET
+queryParams:
+  id: abc
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 400', () => pm.response.to.have.status(400));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = false', () => pm.expect(j.success).to.eql(false));
+      pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("ID harus berupa angka positif"));
+    language: text/javascript
+examples: ./.resources/9. GET - ID bukan angka (400).resources/examples
+order: 9000

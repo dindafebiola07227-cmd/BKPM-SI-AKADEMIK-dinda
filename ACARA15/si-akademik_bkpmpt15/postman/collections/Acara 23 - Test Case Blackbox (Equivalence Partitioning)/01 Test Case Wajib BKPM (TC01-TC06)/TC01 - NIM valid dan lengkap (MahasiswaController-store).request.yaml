@@ -1,0 +1,21 @@
+$kind: http-request
+name: TC01 - NIM valid dan lengkap (MahasiswaController::store)
+description: |-
+  Data uji: nim=220100123
+  Hasil diharapkan: 201
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: '{"nim": "220100123", "nama": "Budi Santoso", "prodi": "Informatika"}'
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC01: NIM valid dan lengkap (MahasiswaController::store) -> status 201", function () {
+          pm.expect(pm.response.code).to.be.oneOf([201]);
+      });
+    language: text/javascript
+order: 1000

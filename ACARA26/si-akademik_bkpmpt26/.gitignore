@@ -1,0 +1,7 @@
+.DS_Store
+
+# Acara 26: foto hasil upload dan berkas backup tidak ikut repository
+public/uploads/*
+!public/uploads/.gitkeep
+!public/uploads/.htaccess
+backup/

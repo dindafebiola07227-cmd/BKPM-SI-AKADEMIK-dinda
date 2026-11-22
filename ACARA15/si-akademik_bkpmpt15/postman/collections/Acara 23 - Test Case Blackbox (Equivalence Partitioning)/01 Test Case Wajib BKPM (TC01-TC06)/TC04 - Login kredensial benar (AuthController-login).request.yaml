@@ -1,0 +1,20 @@
+$kind: http-request
+name: TC04 - Login kredensial benar (AuthController::login)
+description: |-
+  Data uji: username & password benar
+  Hasil diharapkan: 200
+url: "{{base_url}}/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: '{"username": "penguji", "password": "Rahasia123"}'
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC04: Login kredensial benar (AuthController::login) -> status 200", function () {
+          pm.expect(pm.response.code).to.be.oneOf([200]);
+      });
+    language: text/javascript
+order: 4000

@@ -1,0 +1,35 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/mahasiswa"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Authorization: Bearer {{adminToken}}
+  body:
+    type: json
+    content: |-
+      {
+        "nim": "2201001",
+        "nama": "Andi Saputra",
+        "prodi": "Teknik Informatika"
+      }
+response:
+  statusCode: 422
+  statusText: Unknown Status Code
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+          "success": false,
+          "message": "Format NIM tidak valid, harus 9 digit angka",
+          "data": null,
+          "errors": {
+              "nim": [
+                  "NIM harus terdiri dari 9 digit angka"
+              ]
+          },
+          "timestamp": "2026-11-01T00:30:05+07:00"
+      }
+order: 1000

@@ -1,0 +1,30 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/mahasiswa"
+  method: PUT
+  headers:
+    Content-Type: application/json
+    Authorization: Bearer {{token}}
+  body:
+    type: json
+    content: |-
+      {
+        "nim": "{{nimBaru}}",
+        "nama": "Andi Saputra Pratama",
+        "prodi": "Sistem Informasi"
+      }
+response:
+  statusCode: 400
+  statusText: Bad Request
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+          "success": false,
+          "message": "ID wajib diisi dan harus berupa angka positif",
+          "data": null,
+          "timestamp": "2026-11-01T00:30:05+07:00"
+      }
+order: 1000

@@ -1,0 +1,24 @@
+$kind: http-request
+description: Admin boleh mengubah data.
+url: "{{base_url}}/mahasiswa?id={{rbacMhsId}}"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{adminToken}}
+queryParams:
+  id: "{{rbacMhsId}}"
+body:
+  type: json
+  content: |-
+    {
+      "nim": "{{nimBaru}}",
+      "nama": "Andi Saputra Revisi",
+      "prodi": "Teknik Informatika"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 200', () => pm.response.to.have.status(200));
+      pm.test('success = true', () => pm.expect(pm.response.json().success).to.eql(true));
+    language: text/javascript
+order: 7000

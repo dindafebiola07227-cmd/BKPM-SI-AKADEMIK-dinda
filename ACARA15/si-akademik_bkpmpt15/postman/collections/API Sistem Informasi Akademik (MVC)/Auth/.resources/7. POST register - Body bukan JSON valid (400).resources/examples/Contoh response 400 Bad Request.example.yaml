@@ -1,0 +1,24 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/register"
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: "{username: x, email:"
+response:
+  statusCode: 400
+  statusText: Bad Request
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+          "success": false,
+          "message": "Body request harus berupa JSON yang valid",
+          "data": null,
+          "timestamp": "2026-11-01T00:30:05+07:00"
+      }
+order: 1000

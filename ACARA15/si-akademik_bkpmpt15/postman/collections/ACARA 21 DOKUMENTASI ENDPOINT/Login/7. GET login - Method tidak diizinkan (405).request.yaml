@@ -1,0 +1,19 @@
+$kind: http-request
+description: |-
+  Controller: AuthController::login()
+  Contoh response tersimpan pada tab Examples.
+url: "{{base_url}}/login"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 405', () => pm.response.to.have.status(405));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = false', () => pm.expect(j.success).to.eql(false));
+      pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("Method tidak diizinkan"));
+      pm.test('data = null', () => pm.expect(j.data).to.eql(null));
+    language: text/javascript
+examples: ./.resources/7. GET login - Method tidak diizinkan (405).resources/examples
+order: 7000

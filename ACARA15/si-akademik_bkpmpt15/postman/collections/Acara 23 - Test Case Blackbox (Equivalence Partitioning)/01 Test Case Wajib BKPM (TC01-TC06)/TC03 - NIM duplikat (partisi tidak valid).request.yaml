@@ -1,0 +1,20 @@
+$kind: http-request
+description: |-
+  Data uji: nim=220100123 (milik data TC01)
+  Hasil diharapkan: 422
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: '{"nim": "220100123", "nama": "Budi Santoso", "prodi": "Informatika"}'
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC03: NIM duplikat (partisi tidak valid) -> status 422", function () {
+          pm.expect(pm.response.code).to.be.oneOf([422]);
+      });
+    language: text/javascript
+order: 3000

@@ -1,0 +1,34 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/register"
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "username": "{{unameBaru}}",
+        "email": "lain.{{emailBaru}}",
+        "password": "RahasiaUji123"
+      }
+response:
+  statusCode: 409
+  statusText: Conflict
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+          "success": false,
+          "message": "Username sudah terdaftar",
+          "data": null,
+          "errors": {
+              "username": [
+                  "Username sudah terdaftar"
+              ]
+          },
+          "timestamp": "2026-11-01T00:30:05+07:00"
+      }
+order: 1000

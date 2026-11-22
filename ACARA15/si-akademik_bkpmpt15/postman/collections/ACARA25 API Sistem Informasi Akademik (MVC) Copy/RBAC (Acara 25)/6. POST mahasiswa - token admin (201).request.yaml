@@ -1,0 +1,27 @@
+$kind: http-request
+description: Admin boleh menambah data.
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{adminToken}}
+body:
+  type: json
+  content: |-
+    {
+      "nim": "{{nimBaru}}",
+      "nama": "Andi Saputra",
+      "prodi": "Teknik Informatika"
+    }
+scripts:
+  - type: beforeRequest
+    code: pm.collectionVariables.set('nimBaru', '22' + String(Date.now()).slice(-7));
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 201', () => pm.response.to.have.status(201));
+      const j = pm.response.json();
+      pm.test('success = true', () => pm.expect(j.success).to.eql(true));
+      pm.collectionVariables.set('rbacMhsId', j.data.id);
+    language: text/javascript
+order: 6000

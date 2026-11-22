@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{baseA20}}/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "dinda_test",
+      "password": "UjiCoba123"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status 200', () => pm.response.to.have.status(200));
+      const j = pm.response.json();
+      // Token disimpan otomatis -> tidak perlu salin-tempel lagi
+      pm.collectionVariables.set('tokenA20', j.data.token);
+      // Versi rusak (huruf terakhir diganti) untuk tes token diubah
+      const t = j.data.token; pm.collectionVariables.set('tokenRusakA20', t.slice(0,-1) + (t.slice(-1)==='A' ? 'B' : 'A'));
+    language: text/javascript
+order: 1000

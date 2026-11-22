@@ -1,0 +1,22 @@
+$kind: http-request
+description: AuthController::login()
+url: "{{base_url}}/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "{{adminUname}}",
+      "password": "{{adminPass}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 200', () => pm.response.to.have.status(200));
+      const j = pm.response.json();
+      pm.test('role = admin (jalankan database/jadikan_admin.sql bila masih user)', () => pm.expect(j.data.role).to.eql('admin'));
+      pm.collectionVariables.set('adminToken', j.data.token);
+    language: text/javascript
+order: 2000

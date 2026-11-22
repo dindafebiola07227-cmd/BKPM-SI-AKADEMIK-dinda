@@ -1,0 +1,15 @@
+$kind: http-request
+description: Admin boleh menghapus data.
+url: "{{base_url}}/mahasiswa?id={{rbacMhsId}}"
+method: DELETE
+headers:
+  Authorization: Bearer {{adminToken}}
+queryParams:
+  id: "{{rbacMhsId}}"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 200', () => pm.response.to.have.status(200));
+      pm.test('success = true', () => pm.expect(pm.response.json().success).to.eql(true));
+    language: text/javascript
+order: 8000

@@ -1,0 +1,36 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/mahasiswa"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Authorization: Bearer {{adminToken}}
+  body:
+    type: json
+    content: "{}"
+response:
+  statusCode: 400
+  statusText: Bad Request
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+          "success": false,
+          "message": "Field nim, nama, dan prodi wajib diisi",
+          "data": null,
+          "errors": {
+              "nim": [
+                  "Field nim wajib diisi"
+              ],
+              "nama": [
+                  "Field nama wajib diisi"
+              ],
+              "prodi": [
+                  "Field prodi wajib diisi"
+              ]
+          },
+          "timestamp": "2026-11-01T00:30:05+07:00"
+      }
+order: 1000

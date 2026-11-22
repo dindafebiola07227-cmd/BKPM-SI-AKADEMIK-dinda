@@ -1,0 +1,32 @@
+$kind: http-request
+description: |-
+  Controller: MahasiswaController::update()
+  Memerlukan header Authorization: Bearer <token> (Auth::requireAdmin()).
+  Contoh response tersimpan pada tab Examples.
+url: "{{base_url}}/mahasiswa?id=999999"
+method: PUT
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{adminToken}}
+queryParams:
+  id: "999999"
+body:
+  type: json
+  content: |-
+    {
+      "nim": "{{nimBaru}}",
+      "nama": "Andi Saputra Pratama",
+      "prodi": "Sistem Informasi"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('Status code 404', () => pm.response.to.have.status(404));
+      pm.test('Response berformat JSON', () => pm.response.to.be.json);
+      const j = pm.response.json();
+      pm.test('success = false', () => pm.expect(j.success).to.eql(false));
+      pm.test('Envelope lengkap (success, message, data, timestamp)', () => { ['success','message','data','timestamp'].forEach(k => pm.expect(j).to.have.property(k)); });
+      pm.test('Pesan sesuai', () => pm.expect(j.message).to.eql("Data tidak ditemukan"));
+    language: text/javascript
+examples: ./.resources/11. PUT - ID tidak ditemukan (404).resources/examples
+order: 11000

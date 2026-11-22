@@ -1,0 +1,20 @@
+$kind: http-request
+description: |-
+  Data uji: nim=ABCDEFGHI
+  Hasil diharapkan: 422
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+body:
+  type: text
+  content: '{"nim": "ABCDEFGHI", "nama": "Budi Santoso", "prodi": "Informatika"}'
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("TC07: NIM berisi huruf, panjang 9 (partisi tidak valid) -> status 422", function () {
+          pm.expect(pm.response.code).to.be.oneOf([422]);
+      });
+    language: text/javascript
+order: 1000

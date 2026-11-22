@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{base_url}}/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: '{"username": "penguji", "email": "penguji@example.com", "password": "Rahasia123"}'
+scripts:
+  - type: afterResponse
+    code: pm.test("Registrasi penguji (201, atau 409 bila sudah ada)", function () { pm.expect([201,409]).to.include(pm.response.code); });
+    language: text/javascript
+examples: .resources/Registrasi akun penguji.resources/examples
+order: 1000

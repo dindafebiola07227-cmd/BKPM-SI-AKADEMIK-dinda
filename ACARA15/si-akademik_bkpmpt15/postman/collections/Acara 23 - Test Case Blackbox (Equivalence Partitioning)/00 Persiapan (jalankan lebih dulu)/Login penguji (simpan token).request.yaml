@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{base_url}}/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: '{"username": "penguji", "password": "Rahasia123"}'
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Login 200", function () { pm.response.to.have.status(200); });
+      pm.collectionVariables.set("token", pm.response.json().data.token);
+    language: text/javascript
+order: 2000

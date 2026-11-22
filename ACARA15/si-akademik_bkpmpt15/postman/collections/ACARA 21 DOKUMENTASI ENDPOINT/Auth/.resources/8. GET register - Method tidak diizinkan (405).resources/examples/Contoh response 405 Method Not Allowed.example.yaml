@@ -1,0 +1,19 @@
+$kind: http-example
+request:
+  url: "{{base_url}}/register"
+  method: GET
+response:
+  statusCode: 405
+  statusText: Method Not Allowed
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+          "success": false,
+          "message": "Method tidak diizinkan",
+          "data": null,
+          "timestamp": "2026-11-01T00:30:05+07:00"
+      }
+order: 1000

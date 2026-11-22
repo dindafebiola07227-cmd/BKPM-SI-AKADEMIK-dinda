@@ -1,0 +1,10 @@
+$kind: http-request
+url: "{{baseA20}}/mahasiswa?id={{idA20}}"
+method: GET
+queryParams:
+  id: "{{idA20}}"
+scripts:
+  - type: afterResponse
+    code: pm.test('Status 200', () => pm.response.to.have.status(200));
+    language: text/javascript
+order: 4000
