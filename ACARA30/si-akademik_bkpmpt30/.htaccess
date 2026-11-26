@@ -1,0 +1,23 @@
+RewriteEngine On
+
+# Acara 30 (Langkah 2): paksa seluruh trafik ke HTTPS pada server produksi.
+# localhost dikecualikan agar XAMPP tanpa SSL tetap dapat dipakai saat pengembangan.
+# Di belakang proxy/CDN (mis. Cloudflare) HTTPS dideteksi lewat header X-Forwarded-Proto.
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1)(:[0-9]+)?$ [NC]
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+Options -Indexes
+DirectoryIndex public/views/login.html public/index.php
+
+# Teruskan header Authorization ke PHP.
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Root proyek dibuka ke halaman login.
+RewriteRule ^$ public/views/login.html [END]
+
+# Request lain diarahkan ke public/, kecuali request yang sudah menuju public/.
+RewriteCond %{REQUEST_URI} !/public(?:/|$)
+RewriteRule ^(.*)$ public/$1 [END]

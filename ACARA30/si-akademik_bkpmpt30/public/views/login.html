@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - Sistem Informasi Akademik</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="kontainer" style="max-width: 380px;">
+        <div class="kartu">
+            <h1>Login</h1>
+            <form id="form-login">
+                <label for="username">Username</label>
+                <input type="text" id="username" autocomplete="username" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" autocomplete="current-password" required>
+                <p><button type="submit" id="btn-masuk">Masuk</button></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="api.js"></script>
+    <script src="login.js"></script>
+</body>
+</html>

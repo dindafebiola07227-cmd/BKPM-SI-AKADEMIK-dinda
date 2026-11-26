@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ubah Mahasiswa - Sistem Informasi Akademik</title>
+    <link rel="stylesheet" href="style.css">
+    <script>if (!localStorage.getItem('token')) { window.location.href = 'login.html'; }</script>
+</head>
+<body>
+    <div class="kontainer" style="max-width: 520px;">
+        <div class="kartu">
+            <h1>Ubah Mahasiswa</h1>
+            <form id="form-mhs" novalidate>
+                <div class="field">
+                    <label for="nim">NIM</label>
+                    <input type="text" id="nim" name="nim" maxlength="15">
+                    <span class="galat"></span>
+                </div>
+                <div class="field">
+                    <label for="nama">Nama</label>
+                    <input type="text" id="nama" name="nama" maxlength="100">
+                    <span class="galat"></span>
+                </div>
+                <div class="field">
+                    <label for="prodi">Program Studi</label>
+                    <input type="text" id="prodi" name="prodi" maxlength="50">
+                    <span class="galat"></span>
+                </div>
+                <div class="field">
+                    <label>Foto saat ini</label>
+                    <div id="foto-lama" class="pesan">-</div>
+                    <label for="foto">Ganti foto (opsional, JPG/PNG, maks. 2 MB)</label>
+                    <input type="file" id="foto" name="foto" accept="image/jpeg,image/png">
+                    <span class="galat"></span>
+                </div>
+                <p>
+                    <button type="submit" id="btn-simpan">Simpan Perubahan</button>
+                    <a class="tombol abu" href="dashboard.html">Batal</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="api.js"></script>
+    <script src="form_edit.js"></script>
+</body>
+</html>

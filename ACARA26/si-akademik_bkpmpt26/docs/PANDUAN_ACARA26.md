@@ -14,8 +14,9 @@
 ## Cara menjalankan
 1. Letakkan proyek di `C:\xampp\htdocs\BKPM\ACARA26\si-akademik_bkpmpt26`, nyalakan Apache dan MySQL.
 2. Basis data lama (Acara 25): jalankan `database/acara26_foto.sql` di phpMyAdmin. Instalasi baru: impor `db_workshop.sql`.
-3. Pastikan ekstensi `exif` aktif di `php.ini` (`extension=exif`), lalu restart Apache.
-4. Buka `.../public/views/login.html`, login sebagai admin (`admin_uji`), tambah mahasiswa dengan foto.
+3. Jalankan `database/acara26_prodi.sql` sekali untuk menambahkan program studi Manajemen Agribisnis.
+4. Pastikan ekstensi `exif` aktif di `php.ini` (`extension=exif`), lalu restart Apache.
+5. Buka `.../public/views/login.html`, login sebagai admin (`admin_uji`), tambah mahasiswa dengan foto.
 
 ## Catatan teknis
 - **Mengapa `_method=PUT`?** PHP hanya mengisi `$_POST` dan `$_FILES` untuk request POST. Pada PUT bertipe multipart, keduanya kosong, sehingga foto tidak terbaca. Maka pengubahan data dikirim sebagai POST dengan `_method=PUT`.

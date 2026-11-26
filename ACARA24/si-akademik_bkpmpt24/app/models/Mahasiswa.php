@@ -11,12 +11,22 @@ class Mahasiswa
 
     public function getAll(): array
     {
-        return $this->db->query('SELECT * FROM mahasiswa ORDER BY id DESC')->fetchAll();
+        return $this->db->query(
+            'SELECT m.*, p.nama AS prodi
+             FROM mahasiswa m
+             LEFT JOIN prodi p ON p.id = m.prodi_id
+             ORDER BY m.id DESC'
+        )->fetchAll();
     }
 
     public function find(int $id)
     {
-        $stmt = $this->db->prepare('SELECT * FROM mahasiswa WHERE id = :id');
+        $stmt = $this->db->prepare(
+            'SELECT m.*, p.nama AS prodi
+             FROM mahasiswa m
+             LEFT JOIN prodi p ON p.id = m.prodi_id
+             WHERE m.id = :id'
+        );
         $stmt->execute([':id' => $id]);
         return $stmt->fetch();
     }

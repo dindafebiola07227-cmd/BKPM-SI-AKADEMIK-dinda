@@ -11,12 +11,22 @@ class Mahasiswa
 
     public function getAll(): array
     {
-        return $this->db->query('SELECT * FROM mahasiswa ORDER BY id DESC')->fetchAll();
+        return $this->db->query(
+            'SELECT m.*, p.nama AS prodi
+             FROM mahasiswa m
+             LEFT JOIN prodi p ON p.id = m.prodi_id
+             ORDER BY m.id DESC'
+        )->fetchAll();
     }
 
     public function find(int $id)
     {
-        $stmt = $this->db->prepare('SELECT * FROM mahasiswa WHERE id = :id');
+        $stmt = $this->db->prepare(
+            'SELECT m.*, p.nama AS prodi
+             FROM mahasiswa m
+             LEFT JOIN prodi p ON p.id = m.prodi_id
+             WHERE m.id = :id'
+        );
         $stmt->execute([':id' => $id]);
         return $stmt->fetch();
     }
@@ -43,15 +53,22 @@ class Mahasiswa
             throw new DomainException('NIM sudah terdaftar');
         }
 
+        $prodiId = $this->resolveProdiId($data['prodi']);
+
         // Acara 20 (Langkah 5): kegagalan database ditangkap di lapisan Model
         try {
             // Acara 26 (Langkah 3): kolom foto ikut disimpan (null jika tidak ada berkas diunggah)
             $stmt = $this->db->prepare(
-                'INSERT INTO mahasiswa (nim, nama, prodi, foto) VALUES (:nim, :nama, :prodi, :foto)'
+                'INSERT INTO mahasiswa (nim, nama, email, prodi_id, angkatan, foto)
+                 VALUES (:nim, :nama, :email, :prodi_id, :angkatan, :foto)'
             );
             $stmt->execute([
-                ':nim' => $data['nim'], ':nama' => $data['nama'],
-                ':prodi' => $data['prodi'], ':foto' => $data['foto'] ?? null,
+                ':nim' => $data['nim'],
+                ':nama' => $data['nama'],
+                ':email' => $data['nim'] . '@example.com',
+                ':prodi_id' => $prodiId,
+                ':angkatan' => (int) date('Y'),
+                ':foto' => $data['foto'] ?? null,
             ]);
             return $this->db->lastInsertId();
         } catch (PDOException $e) {
@@ -65,10 +82,12 @@ class Mahasiswa
             throw new DomainException('NIM sudah terdaftar');
         }
 
+        $prodiId = $this->resolveProdiId($data['prodi']);
+
         try {
             // Acara 26: kolom foto hanya diubah bila ada foto baru; tanpa foto baru, foto lama dipertahankan
-            $sql    = 'UPDATE mahasiswa SET nim = :nim, nama = :nama, prodi = :prodi';
-            $params = [':nim' => $data['nim'], ':nama' => $data['nama'], ':prodi' => $data['prodi'], ':id' => $id];
+            $sql    = 'UPDATE mahasiswa SET nim = :nim, nama = :nama, prodi_id = :prodi_id';
+            $params = [':nim' => $data['nim'], ':nama' => $data['nama'], ':prodi_id' => $prodiId, ':id' => $id];
 
             if (!empty($data['foto'])) {
                 $sql .= ', foto = :foto';
@@ -90,6 +109,29 @@ class Mahasiswa
         } catch (PDOException $e) {
             $this->handleDbError($e);
         }
+    }
+
+    private function resolveProdiId(string $prodi): int
+    {
+        $nilai = trim($prodi);
+        if (strcasecmp($nilai, 'Management Agribisnis') === 0) {
+            $nilai = 'Manajemen Agribisnis';
+        }
+
+        $stmt = ctype_digit($nilai)
+            ? $this->db->prepare('SELECT id FROM prodi WHERE id = :nilai')
+            : $this->db->prepare('SELECT id FROM prodi WHERE nama = :nilai OR kode = :nilai LIMIT 1');
+        $stmt->execute([':nilai' => $nilai]);
+        $id = $stmt->fetchColumn();
+
+        if (!$id) {
+            throw new ValidationException(
+                'Data mahasiswa tidak valid',
+                ['prodi' => ['Program studi tidak ditemukan']],
+                422
+            );
+        }
+        return (int) $id;
     }
 
     // Penanganan error database yang dipakai bersama oleh create(), update(), delete()

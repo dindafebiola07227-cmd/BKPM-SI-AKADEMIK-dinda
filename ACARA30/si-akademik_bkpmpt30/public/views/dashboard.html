@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard - Sistem Informasi Akademik</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Acara 25: halaman dilindungi; tanpa token langsung kembali ke login -->
+    <script>
+        if (!localStorage.getItem('token')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+</head>
+<body>
+    <div class="kontainer">
+        <div class="kartu bar">
+            <div>
+                <h1>Dashboard</h1>
+                Masuk sebagai <b id="info-user"></b> <span class="badge" id="info-role"></span>
+            </div>
+            <button type="button" class="abu" id="btn-logout">Logout</button>
+        </div>
+
+        <div class="kartu ringkasan">
+            Total mahasiswa: <b id="total-mhs">-</b>
+        </div>
+
+        <div class="kartu">
+            <div class="bar">
+                <h1>Data Mahasiswa</h1>
+                <!-- Acara 27: Tambah membuka form_tambah.html -->
+                <a class="tombol" id="btn-tambah" href="form_tambah.html">Tambah</a>
+            </div>
+
+            <table id="tabel-mahasiswa">
+                <thead><tr><th>Foto</th><th>NIM</th><th>Nama</th><th>Program Studi</th><th class="kolom-aksi">Aksi</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="api.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

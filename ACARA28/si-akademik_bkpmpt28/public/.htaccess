@@ -1,0 +1,15 @@
+RewriteEngine On
+
+# Izinkan file frontend dan resource dimuat browser.
+Options -Indexes
+Require all granted
+DirectoryIndex views/login.html index.php
+
+# Teruskan header Authorization ke PHP.
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Hanya request API/non-file yang diteruskan ke front controller.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]

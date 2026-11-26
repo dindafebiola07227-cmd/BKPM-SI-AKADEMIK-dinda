@@ -8,7 +8,7 @@ class Database
     {
         if (self::$connection === null) {
             $host    = 'localhost';
-            $db      = 'db_workshop';
+            $db      = 'db_workshopku';
             $charset = 'utf8mb4';
             $dsn     = "mysql:host=$host;dbname=$db;charset=$charset";
             $options = [

@@ -1,0 +1,6 @@
+# Acara 26: folder upload hanya menyajikan gambar. Skrip tidak boleh dieksekusi
+# dan isi folder tidak boleh ditampilkan sebagai daftar.
+Options -Indexes
+<FilesMatch "\.(php|phtml|phar|php[0-9])$">
+    Require all denied
+</FilesMatch>

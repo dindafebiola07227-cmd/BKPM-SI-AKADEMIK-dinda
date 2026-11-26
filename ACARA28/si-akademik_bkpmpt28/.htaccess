@@ -1,0 +1,15 @@
+RewriteEngine On
+
+Options -Indexes
+DirectoryIndex public/views/login.html public/index.php
+
+# Teruskan header Authorization ke PHP.
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Root proyek dibuka ke halaman login.
+RewriteRule ^$ public/views/login.html [END]
+
+# Request lain diarahkan ke public/, kecuali request yang sudah menuju public/.
+RewriteCond %{REQUEST_URI} !/public(?:/|$)
+RewriteRule ^(.*)$ public/$1 [END]

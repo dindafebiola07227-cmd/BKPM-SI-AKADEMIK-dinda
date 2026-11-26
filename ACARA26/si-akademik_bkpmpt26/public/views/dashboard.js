@@ -39,7 +39,7 @@ function tampilkanPesan(teks, kelas = '') {
 async function panggilApi(path, opsi = {}) {
     // Acara 26: untuk FormData, Content-Type TIDAK boleh diisi manual; browser menambahkan
     // "multipart/form-data; boundary=..." sendiri. Jika dipaksa JSON, PHP tidak bisa membaca berkasnya.
-    const headers = { 'Authorization': `Bearer ${token}` };
+    const headers = { 'Authorization': 'Bearer ' + token };
     if (!(opsi.body instanceof FormData)) {
         headers['Content-Type'] = 'application/json';
     }
@@ -103,8 +103,8 @@ function bukaForm(m = null) {
 
 // Pesan kesalahan dari API (403 dari requireAdmin, 409/422 dari validasi) ditampilkan apa adanya
 function laporkanGagal(hasil) {
-    const detail = hasil.errors ? '\n' + Object.values(hasil.errors).flat().join('\n') : '';
-    alert(`${hasil.message}${detail}`);
+    const detail = hasil.errors ? Object.values(hasil.errors).flat().join('\n') : '';
+    alert(detail || hasil.message);
 }
 
 async function simpanMahasiswa(e) {

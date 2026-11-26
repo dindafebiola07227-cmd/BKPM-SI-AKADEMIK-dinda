@@ -1,0 +1,6 @@
+.DS_Store
+# Acara 30: kredensial dan berkas lokal tidak boleh masuk Git
+app/config/config.local.php
+si-akademik_config.php
+database/backup/
+*.log

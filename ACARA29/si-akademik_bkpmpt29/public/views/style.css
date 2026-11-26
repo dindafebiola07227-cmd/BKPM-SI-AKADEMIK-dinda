@@ -1,0 +1,49 @@
+body { font-family: Arial, sans-serif; margin: 0; color: #222; background: #f5f7fa; }
+.kontainer { max-width: 820px; margin: 32px auto; padding: 0 16px; }
+.kartu { background: #fff; border: 1px solid #dde3ea; border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+h1 { font-size: 22px; margin: 0 0 12px; }
+label { display: block; margin: 10px 0 4px; font-size: 14px; }
+input { width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid #b8c2cc; border-radius: 4px; }
+button { padding: 8px 14px; border: 0; border-radius: 4px; background: #1f4e79; color: #fff; cursor: pointer; }
+button.merah { background: #b00020; }
+button.abu { background: #6b7785; }
+button:hover { opacity: .9; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid #ccd3db; padding: 8px 10px; text-align: left; }
+th { background: #1f4e79; color: #fff; }
+tbody tr:nth-child(even) { background: #f3f6fa; }
+.bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.ringkasan { font-size: 15px; }
+.ringkasan b { font-size: 28px; color: #1f4e79; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; background: #e3ecf5; font-size: 12px; }
+.pesan { font-style: italic; color: #555; text-align: center; }
+.pesan.error { color: #b00020; font-style: normal; }
+.aksi button { padding: 4px 10px; font-size: 13px; margin-right: 4px; }
+#form-mhs[hidden] { display: none; }
+img.foto { width: 48px; height: 48px; object-fit: cover; border-radius: 4px; border: 1px solid #ccd3db; }
+small { color: #6b7785; }
+
+/* Acara 27: tautan bergaya tombol, validasi form, notifikasi */
+a.tombol { display: inline-block; padding: 8px 14px; border-radius: 4px; background: #1f4e79; color: #fff; text-decoration: none; font-size: 14px; }
+a.tombol.abu { background: #6b7785; }
+a.tombol.kecil { padding: 4px 10px; font-size: 13px; margin-right: 4px; }
+a.tombol[hidden] { display: none; }
+.field { margin-bottom: 4px; }
+.galat { display: block; min-height: 16px; font-size: 12px; color: #b00020; margin-top: 2px; }
+input.invalid { border-color: #b00020; background: #fff6f7; }
+.notif { position: fixed; top: 16px; right: 16px; max-width: 340px; padding: 12px 16px; border-radius: 6px; color: #fff; font-size: 14px; box-shadow: 0 4px 14px rgba(0,0,0,.2); z-index: 50; }
+.notif.sukses { background: #1e7d46; }
+.notif.galat { background: #b00020; }
+.notif[hidden] { display: none; }
+
+/* Acara 29: loading state, galat memuat data, notifikasi info */
+.spinner { display: inline-block; width: 14px; height: 14px; margin-right: 8px; vertical-align: -2px; border: 2px solid #b8c2cc; border-top-color: #1f4e79; border-radius: 50%; animation: putar .8s linear infinite; }
+@keyframes putar { to { transform: rotate(360deg); } }
+button:disabled { opacity: .6; cursor: not-allowed; }
+button.memuat::before { content: ""; display: inline-block; width: 12px; height: 12px; margin-right: 6px; vertical-align: -2px; border: 2px solid rgba(255,255,255,.5); border-top-color: #fff; border-radius: 50%; animation: putar .8s linear infinite; }
+button.kecil { padding: 4px 10px; font-size: 13px; }
+.status-muat { min-height: 0; margin-bottom: 8px; font-size: 14px; color: #555; font-style: italic; }
+.status-muat:empty { display: none; }
+.status-muat.error { color: #b00020; font-style: normal; }
+.notif.info { background: #1f4e79; }
+@media (prefers-reduced-motion: reduce) { .spinner, button.memuat::before { animation-duration: 2.4s; } }
